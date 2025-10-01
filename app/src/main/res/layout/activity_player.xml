@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black">
+
+    <!-- 播放器视图 -->
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- 视频标题 -->
+            <TextView
+                android:id="@+id/tv_video_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="视频标题"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- 上传者信息 -->
+            <TextView
+                android:id="@+id/tv_uploader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上传者：未知"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp" />
+
+            <!-- 播放统计 -->
+            <TextView
+                android:id="@+id/tv_video_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="播放：0次 | 点赞：0"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- 视频描述 -->
+            <TextView
+                android:id="@+id/tv_video_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="视频描述信息..."
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:background="@color/list_background">
+
+        <!-- 推荐标题 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="推荐视频"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp" />
+
+        <!-- 预留的推荐列表区域 -->
+        <ListView
+            android:id="@+id/lv_recommendations"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
