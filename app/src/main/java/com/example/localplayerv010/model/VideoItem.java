@@ -3,6 +3,8 @@ package com.example.localplayerv010.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.localplayerv010.utils.VideoUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -171,9 +173,9 @@ public class VideoItem implements Parcelable {
     public long getFileSize() {
         return FileSize;
     }
-//    public String getFormattedFileSize() {
-//        return VideoUtils.formatFileSize(FileSize);
-//    }
+    public String getFormattedFileSize() {
+        return VideoUtils.formatFileSize(FileSize);
+    }
 
     public Date getUploadTime() {
         return UploadTime;
@@ -209,6 +211,80 @@ public class VideoItem implements Parcelable {
     }
     public void setLastPlayPosition(long lastPlayPosition) {
         LastPlayPosition = lastPlayPosition;
+    }
+
+
+
+
+
+    //测试用setter，无实际意义
+
+    public String getUploaderName() {
+        return UploaderName;
+    }
+
+    public void setDuration(long duration) {
+        Duration = duration;
+    }
+
+    public void setResolutionWidth(int resolutionWidth) {
+        ResolutionWidth = resolutionWidth;
+    }
+
+    public void setResolutionHeight(int resolutionHeight) {
+        ResolutionHeight = resolutionHeight;
+    }
+    public void setUploadTime(Date uploadTime) {
+        UploadTime = uploadTime;
+    }
+
+    public void setVideoPath(String videoPath) {
+        VideoPath = videoPath;
+    }
+
+    public void setFileSize(long fileSize) {
+        FileSize = fileSize;
+    }
+
+    public void setFormat(String format) {
+        Format = format;
+    }
+
+    public void setLikeCount(int likeCount) {
+        LikeCount = likeCount;
+    }
+
+    public void setCategory(String category) {
+        Category = category;
+    }
+
+    public void setUploaderName(String uploaderName) {
+        UploaderName = uploaderName;
+    }
+
+
+
+
+    //利用工具类获得格式化好的信息
+    public String getFormatDuration(){
+        return VideoUtils.formatDuration(Duration);
+    }
+    public String getFormatPlayCount(){
+        return VideoUtils.formatCount(PlayCount)+"次播放";
+    }
+    public String getFormatUploadTime(){
+        return VideoUtils.formatUploadTime(UploadTime);
+    }
+    public String getFormatResolution(){
+        return VideoUtils.formatResolution(ResolutionWidth,ResolutionHeight);
+    }
+
+    public String getVideoInfoSummary() {
+        return String.format("%s · %s · %s",
+                getFormatPlayCount(),
+                getFormatDuration(),
+                getFormatUploadTime()
+        );
     }
 
 

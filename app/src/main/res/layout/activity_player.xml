@@ -44,6 +44,15 @@
                 android:textSize="14sp"
                 android:layout_marginTop="8dp" />
 
+            <TextView
+                android:id="@+id/tv_uploadtime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上传时间"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp" />
+
             <!-- 播放统计 -->
             <TextView
                 android:id="@+id/tv_video_stats"
@@ -55,6 +64,26 @@
                 android:layout_marginTop="4dp" />
 
             <!-- 视频描述 -->
+            <TextView
+                android:id="@+id/tv_video_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="视频大小"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp" />
+
+            <TextView
+                android:id="@+id/tv_video_resolution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="分辨率"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp" />
+
             <TextView
                 android:id="@+id/tv_video_description"
                 android:layout_width="match_parent"
