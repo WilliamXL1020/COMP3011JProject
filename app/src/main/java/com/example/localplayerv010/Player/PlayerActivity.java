@@ -2,20 +2,29 @@ package com.example.localplayerv010.Player;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.localplayerv010.R;
+import com.example.localplayerv010.adapter.videoListAdapter;
 import com.example.localplayerv010.model.VideoItem;
+import com.example.localplayerv010.service.MockVideoService;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class PlayerActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
@@ -41,10 +50,15 @@ public class PlayerActivity extends AppCompatActivity {
 
 
         setupVideoInfoDisplay();
-
-
-
-
+        setupRecommendations();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            player.release();
+            player = null;
+        }
     }
 //    private void createMockVideoData() {
 //        currentVideo = new VideoItem();
@@ -76,6 +90,8 @@ public class PlayerActivity extends AppCompatActivity {
         TextView tvDescription = findViewById(R.id.tv_video_description);
         TextView tvResolution = findViewById(R.id.tv_video_resolution);
         TextView tvSize = findViewById(R.id.tv_video_size);
+        TextView tvUploadTime = findViewById(R.id.tv_video_uploadtime);
+        TextView tvCatagory = findViewById(R.id.tv_video_catagory);
 
 
 
@@ -95,8 +111,14 @@ public class PlayerActivity extends AppCompatActivity {
         if (tvResolution != null) {
             tvResolution.setText(currentVideo.getFormatResolution());
         }
-        if(tvSize != null){
+        if (tvSize != null){
             tvSize.setText("视频大小:"  + currentVideo.getFormattedFileSize());
+        }
+        if (tvUploadTime != null){
+            tvUploadTime.setText("上传时间:" + currentVideo.getFormatUploadTime());
+        }
+        if (tvCatagory != null){
+            tvCatagory.setText("标签："+currentVideo.getCategory());
         }
 
     }
@@ -121,4 +143,44 @@ public class PlayerActivity extends AppCompatActivity {
         //自动播放
         player.play();
     }
+
+
+    private void setupRecommendations() {
+        ListView listView = findViewById(R.id.lv_recommendations);
+
+        // 获取推荐视频数据（排除当前播放的视频）
+        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+        List<VideoItem> recommendedVideos = new ArrayList<>();
+
+        // 调整筛选逻辑，不推荐自己，打乱顺序，以及后续要想办法对比标签
+        for (VideoItem video : allVideos) {
+            if (!video.getVideoId().equals(currentVideo.getVideoId())) {
+                recommendedVideos.add(video);
+            }
+        }
+
+        //打乱所有除自己外的推荐视频
+        Collections.shuffle(recommendedVideos);
+
+        //打乱后取前十个
+        if (recommendedVideos.size() > 10) {
+            recommendedVideos = recommendedVideos.subList(0, 10);
+        }
+
+        // 设置适配器
+        videoListAdapter adapter = new videoListAdapter(this, recommendedVideos);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            VideoItem selectedVideo = (VideoItem)adapter.getItem(position);
+
+            Log.d("VideoJump", "跳转到视频: " + selectedVideo.getTitle());
+
+            // 创建新的播放页
+            Intent intent = new Intent(PlayerActivity.this, PlayerActivity.class);
+            intent.putExtra("video_data", selectedVideo);
+            startActivity(intent);
+        });
+    }
 }
+
+

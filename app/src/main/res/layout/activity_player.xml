@@ -36,7 +36,7 @@
 
             <!-- 上传者信息 -->
             <TextView
-                android:id="@+id/tv_uploader"
+                android:id="@+id/tv_video_uploader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="上传者：未知"
@@ -45,7 +45,7 @@
                 android:layout_marginTop="8dp" />
 
             <TextView
-                android:id="@+id/tv_uploadtime"
+                android:id="@+id/tv_video_uploadtime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="上传时间"
@@ -94,6 +94,16 @@
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="4dp" />
 
+            <TextView
+                android:id="@+id/tv_video_catagory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="标签"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -110,9 +120,9 @@
             android:layout_height="wrap_content"
             android:text="推荐视频"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:padding="16dp" />
+            android:padding="10dp" />
 
         <!-- 预留的推荐列表区域 -->
         <ListView

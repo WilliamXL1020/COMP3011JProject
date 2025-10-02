@@ -51,11 +51,7 @@ public class VideoItem implements Parcelable {
 
     //构造函数
     public VideoItem() {}
-    public VideoItem(String videoId, String title, String videoPath) {
-        this.VideoId = VideoId;
-        this.Title = Title;
-        this.VideoPath = VideoPath;
-    }
+
 
     //读取视频信息
     protected VideoItem(Parcel in) {
@@ -190,6 +186,10 @@ public class VideoItem implements Parcelable {
     }
 
 
+    public int getLikeCount() {
+        return LikeCount;
+    }
+
     public boolean isLiked() {
         return isLiked;
     }
@@ -213,10 +213,9 @@ public class VideoItem implements Parcelable {
         LastPlayPosition = lastPlayPosition;
     }
 
-
-
-
-
+    public String getCategory() {
+        return Category;
+    }
     //测试用setter，无实际意义
 
     public String getUploaderName() {
@@ -277,6 +276,9 @@ public class VideoItem implements Parcelable {
     }
     public String getFormatResolution(){
         return VideoUtils.formatResolution(ResolutionWidth,ResolutionHeight);
+    }
+    public String getFormatLikeCount(){
+        return VideoUtils.formatCount(LikeCount)+"次赞";
     }
 
     public String getVideoInfoSummary() {

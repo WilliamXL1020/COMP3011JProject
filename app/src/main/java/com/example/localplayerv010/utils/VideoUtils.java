@@ -152,47 +152,47 @@ public class VideoUtils {
         return formatResolution(width, height) + " (" + getResolutionTag(width, height) + ")";
     }
 
-
-    public static List<VideoItem> scanRealVideos(Context context) {
-        List<VideoItem> videoList = new ArrayList<>();
-
-        try {
-            // 只扫描两个最常见目录
-            String[] scanPaths = {
-//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(),
-//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera"
-                    "/sdcard/Pictures",
-                    context.getExternalFilesDir(null).getAbsolutePath()
-            };
-
-            for (String path : scanPaths) {
-                File directory = new File(path);
-                if (directory.exists()) {
-                    File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".mp4"));
-
-                    if (files != null) {
-                        for (File file : files) {
-                            Log.d("VideoScan", "找到视频: " + file.getName() + ", 大小: " + file.length());
-
-                            // 创建VideoItem并填充真实文件信息
-                            VideoItem video = new VideoItem();
-                            video.setVideoId("real_" + System.currentTimeMillis()); // 简单ID
-                            video.setTitle(file.getName());
-                            video.setVideoPath("file://" + file.getAbsolutePath()); // 注意加file://
-                            video.setFileSize(file.length());
-                            video.setUploadTime(new Date(file.lastModified()));
-                            video.setFormat("mp4");
-
-                            videoList.add(video);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Toast.makeText(context, "扫描出错: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e("VideoScan", "扫描失败: " + e.getMessage());
-        }
-
-        return videoList;
-    }
+//    扫描对应路径下本地文件
+//    public static List<VideoItem> scanRealVideos(Context context) {
+//        List<VideoItem> videoList = new ArrayList<>();
+//
+//        try {
+//            // 只扫描两个最常见目录
+//            String[] scanPaths = {
+////                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(),
+////                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera"
+//                    "/sdcard/Pictures",
+//                    context.getExternalFilesDir(null).getAbsolutePath()
+//            };
+//
+//            for (String path : scanPaths) {
+//                File directory = new File(path);
+//                if (directory.exists()) {
+//                    File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".mp4"));
+//
+//                    if (files != null) {
+//                        for (File file : files) {
+//                            Log.d("VideoScan", "找到视频: " + file.getName() + ", 大小: " + file.length());
+//
+//                            // 创建VideoItem并填充真实文件信息
+//                            VideoItem video = new VideoItem();
+//                            video.setVideoId("real_" + System.currentTimeMillis()); // 简单ID
+//                            video.setTitle(file.getName());
+//                            video.setVideoPath("file://" + file.getAbsolutePath()); // 注意加file://
+//                            video.setFileSize(file.length());
+//                            video.setUploadTime(new Date(file.lastModified()));
+//                            video.setFormat("mp4");
+//
+//                            videoList.add(video);
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(context, "扫描出错: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//            Log.e("VideoScan", "扫描失败: " + e.getMessage());
+//        }
+//
+//        return videoList;
+//    }
 }
