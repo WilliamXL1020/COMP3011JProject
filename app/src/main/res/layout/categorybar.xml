@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroll_categories"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@android:color/white"
-    android:scrollbars="none"
-    android:fillViewport="true"
-    >
+    android:orientation="vertical">
+    <HorizontalScrollView
+        android:id="@+id/scroll_categories"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        >
 
-<LinearLayout
-    android:id="@+id/container_categories"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    <LinearLayout
+        android:id="@+id/container_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-    <!-- 这里的分区会通过Java代码动态添加 -->
+        <!-- 这里的分区会通过Java代码动态添加 -->
 
 
+    </LinearLayout>
+
+
+    </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black" />
 </LinearLayout>
-
-</HorizontalScrollView>

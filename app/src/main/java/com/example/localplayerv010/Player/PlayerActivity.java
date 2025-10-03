@@ -94,9 +94,8 @@ public class PlayerActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d("Fullscreen", "方向变化: " + newConfig.orientation);
-
-        // 这里不需要做任何事，因为方向变化不会重建Activity
     }
+    //搜索框焦点改变，当点击其他内容时候搜索框不涉及变化
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
