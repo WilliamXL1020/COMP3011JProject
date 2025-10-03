@@ -2,13 +2,24 @@ package com.example.localplayerv010.Player;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.browse.MediaBrowser;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +42,11 @@ public class PlayerActivity extends AppCompatActivity {
     private PlayerView playerView;
     private Button btnPlayer;
     private VideoItem currentVideo;
+    private boolean isFullscreen = false;
+
+    // 双击相关变量
+    private long lastTapTime = 0;
+    private static final long DOUBLE_TAP_DELAY = 300; // 双击间隔300毫秒
 
 
     @Override
@@ -38,17 +54,12 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         currentVideo = getIntent().getParcelableExtra("video_data");
-
-
         //初始化组件
         playerView = findViewById(R.id.player_view);
-
-
-//        createMockVideoData();
         //调用初始化完的播放器
         InitializePlayer();
-
-
+        setupCustomFullscreenButton();
+        setupDoubleTap();
         setupVideoInfoDisplay();
         setupRecommendations();
     }
@@ -59,6 +70,13 @@ public class PlayerActivity extends AppCompatActivity {
             player.release();
             player = null;
         }
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d("Fullscreen", "方向变化: " + newConfig.orientation);
+
+        // 这里不需要做任何事，因为方向变化不会重建Activity
     }
 //    private void createMockVideoData() {
 //        currentVideo = new VideoItem();
@@ -80,7 +98,148 @@ public class PlayerActivity extends AppCompatActivity {
 //        currentVideo.setUploaderName("测试用户");
 //        currentVideo.setCategory("测试分类");
 //    }
+    //设置全屏按钮
+    private void setupCustomFullscreenButton() {
+        ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
+        btnFullscreen.setOnClickListener(v -> toggleFullscreen());
 
+        // 根据全屏状态更新图标
+        updateFullscreenIcon();
+    }
+
+    //执行全屏行为
+    private void toggleFullscreen() {
+        if (isFullscreen) {
+            exitFullscreen();
+        } else {
+            enterFullscreen();
+        }
+        isFullscreen = !isFullscreen;
+        updateFullscreenIcon();
+    }
+
+    //全屏执行具体方法（隐藏actionbar和其他组件）
+    private void enterFullscreen() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            // 隐藏标题
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            // 隐藏图标
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+        }
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        //强制横屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //隐藏其他组件
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            );
+        }
+
+
+        findViewById(R.id.video_info_container).setVisibility(View.GONE);
+        findViewById(R.id.recommendations_container).setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) playerView.getLayoutParams();
+            params.weight = 1;
+            params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+            playerView.setLayoutParams(params);
+        playerView.post(() -> {
+            playerView.requestLayout();
+            playerView.invalidate();
+        });
+    }
+
+    private void exitFullscreen() {
+        //强制竖屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // 显示状态栏和导航栏
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+
+        // 显示ActionBar（如果有）
+        if (getSupportActionBar() != null) {
+            // 恢复背景色（使用你的主题颜色）
+            getSupportActionBar().setBackgroundDrawable(
+                    new ColorDrawable(getResources().getColor(R.color.colorPrimary)) // 你的主题色
+            );
+            // 恢复标题显示
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            // 恢复图标显示
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        // 恢复状态栏颜色（如果需要）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(android.R.color.background_dark));
+        }
+
+        //显示视频信息区域和推荐列表
+        findViewById(R.id.video_info_container).setVisibility(View.VISIBLE);
+        findViewById(R.id.recommendations_container).setVisibility(View.VISIBLE);
+
+        // 恢复播放器原始布局权重
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) playerView.getLayoutParams();
+        params.weight = 4; // 恢复原始权重
+        params.height = 0;
+        playerView.setLayoutParams(params);
+    }
+
+    private void updateFullscreenIcon() {
+        ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
+        if (btnFullscreen != null) {
+            if (isFullscreen) {
+                btnFullscreen.setImageResource(R.drawable.ic_fullscreen_exit);
+            } else {
+                btnFullscreen.setImageResource(R.drawable.ic_fullscreen);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //初始化播放器的方法
+    private void InitializePlayer(){
+        //创建播放器实例
+        player = new SimpleExoPlayer.Builder(this).build();
+        //将播放器绑定于视图
+        playerView.setPlayer(player);
+        playerView.setUseController(true);
+
+        //创建播放具体内容，后续调整为视频仓库中和视频接口内的内容
+        Uri videoUri = Uri.parse(currentVideo.getVideoPath());
+        MediaItem mediaItem = MediaItem.fromUri(videoUri);
+
+        //设置让媒体播放器开始播放
+        player.setMediaItem(mediaItem);
+        player.prepare();
+
+        //自动播放
+        player.play();
+    }
     // 设置视频信息显示
     private void setupVideoInfoDisplay() {
         // 绑定UI组件 - 你需要先在activity_player.xml中添加这些TextView
@@ -123,28 +282,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     }
 
-
-
-    //初始化播放器的方法
-    private void InitializePlayer(){
-        //创建播放器实例
-        player = new SimpleExoPlayer.Builder(this).build();
-        //将播放器绑定于视图
-        playerView.setPlayer(player);
-
-        //创建播放具体内容，后续调整为视频仓库中和视频接口内的内容
-        Uri videoUri = Uri.parse(currentVideo.getVideoPath());
-        MediaItem mediaItem = MediaItem.fromUri(videoUri);
-
-        //设置让媒体播放器开始播放
-        player.setMediaItem(mediaItem);
-        player.prepare();
-
-        //自动播放
-        player.play();
-    }
-
-
     private void setupRecommendations() {
         ListView listView = findViewById(R.id.lv_recommendations);
 
@@ -175,11 +312,46 @@ public class PlayerActivity extends AppCompatActivity {
 
             Log.d("VideoJump", "跳转到视频: " + selectedVideo.getTitle());
 
+            if (player != null && player.isPlaying()) {
+                player.pause();
+            }
+
             // 创建新的播放页
             Intent intent = new Intent(PlayerActivity.this, PlayerActivity.class);
             intent.putExtra("video_data", selectedVideo);
             startActivity(intent);
         });
+    }
+
+    private void setupDoubleTap(){
+        playerView.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastTapTime < DOUBLE_TAP_DELAY){
+                        togglePlayPause();
+                        return true;
+                    }
+                    lastTapTime = currentTime;
+                }
+                return false;
+            }
+        });
+    }
+    private void togglePlayPause(){
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.pause();
+            } else {
+                player.play();
+            }
+
+            // 简单的文字提示
+            String message = player.isPlaying() ? "播放" : "暂停";
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 }
 
