@@ -1,6 +1,7 @@
 package com.example.localplayerv010.Player;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 import android.content.Intent;
@@ -18,11 +19,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.adapter.videoListAdapter;
@@ -30,6 +33,7 @@ import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
@@ -43,6 +47,7 @@ public class PlayerActivity extends AppCompatActivity {
     private Button btnPlayer;
     private VideoItem currentVideo;
     private boolean isFullscreen = false;
+    private Toolbar toolbar;
 
     // 双击相关变量
     private long lastTapTime = 0;
@@ -57,11 +62,25 @@ public class PlayerActivity extends AppCompatActivity {
         //初始化组件
         playerView = findViewById(R.id.player_view);
         //调用初始化完的播放器
+        setupToolbar();
         InitializePlayer();
+        setupWithExoController();
         setupCustomFullscreenButton();
         setupDoubleTap();
         setupVideoInfoDisplay();
         setupRecommendations();
+    }
+    @Override
+    public void onBackPressed() {
+        if (isFullscreen) {
+            // 全屏时，退出全屏而不是关闭Activity
+            exitFullscreen();
+            isFullscreen = false; // 确保状态同步
+            updateFullscreenIcon();
+        } else {
+            // 非全屏时，正常返回
+            super.onBackPressed();
+        }
     }
     @Override
     protected void onDestroy() {
@@ -77,6 +96,16 @@ public class PlayerActivity extends AppCompatActivity {
         Log.d("Fullscreen", "方向变化: " + newConfig.orientation);
 
         // 这里不需要做任何事，因为方向变化不会重建Activity
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                v.clearFocus();
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 //    private void createMockVideoData() {
 //        currentVideo = new VideoItem();
@@ -98,6 +127,14 @@ public class PlayerActivity extends AppCompatActivity {
 //        currentVideo.setUploaderName("测试用户");
 //        currentVideo.setCategory("测试分类");
 //    }
+
+    private void setupToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+
+
     //设置全屏按钮
     private void setupCustomFullscreenButton() {
         ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
@@ -120,14 +157,15 @@ public class PlayerActivity extends AppCompatActivity {
 
     //全屏执行具体方法（隐藏actionbar和其他组件）
     private void enterFullscreen() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            // 隐藏标题
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            // 隐藏图标
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//            // 隐藏标题
+//            getSupportActionBar().setDisplayShowTitleEnabled(false);
+//            // 隐藏图标
+//            getSupportActionBar().setDisplayShowHomeEnabled(false);
+//
+//        }
+        toolbar.setVisibility(View.GONE);
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -164,6 +202,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void exitFullscreen() {
+        toolbar.setVisibility(View.VISIBLE);
         //强制竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -171,21 +210,21 @@ public class PlayerActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 
         // 显示ActionBar（如果有）
-        if (getSupportActionBar() != null) {
-            // 恢复背景色（使用你的主题颜色）
-            getSupportActionBar().setBackgroundDrawable(
-                    new ColorDrawable(getResources().getColor(R.color.colorPrimary)) // 你的主题色
-            );
-            // 恢复标题显示
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            // 恢复图标显示
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+//        if (getSupportActionBar() != null) {
+//            // 恢复背景色（使用你的主题颜色）
+//            getSupportActionBar().setBackgroundDrawable(
+//                    new ColorDrawable(getResources().getColor(R.color.colorPrimary)) // 你的主题色
+//            );
+//            // 恢复标题显示
+//            getSupportActionBar().setDisplayShowTitleEnabled(true);
+//            // 恢复图标显示
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
 
         // 恢复状态栏颜色（如果需要）
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(android.R.color.background_dark));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setStatusBarColor(getResources().getColor(android.R.color.background_dark));
+//        }
 
         //显示视频信息区域和推荐列表
         findViewById(R.id.video_info_container).setVisibility(View.VISIBLE);
@@ -209,6 +248,19 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    private void setupWithExoController() {
+        // 监听控制器的显示/隐藏
+        playerView.setControllerVisibilityListener(new PlayerControlView.VisibilityListener() {
+            @Override
+            public void onVisibilityChange(int visibility) {
+                ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
+                if (btnFullscreen != null) {
+                    // 控制器显示时显示按钮，隐藏时隐藏按钮
+                    btnFullscreen.setVisibility(visibility);
+                }
+            }
+        });
+    }
 
 
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.localplayerv010.Homepage.HomeActivity;
 import com.example.localplayerv010.model.VideoItem;
 
 import com.example.localplayerv010.Player.PlayerActivity;
@@ -24,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         setupWithMockData();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
 //        testVideoScan();
     }
 

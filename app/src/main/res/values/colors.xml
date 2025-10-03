@@ -6,4 +6,7 @@
     <color name="background">#ADD8E6</color>
     <color name="list_background">#FF77FF</color>
     <color name="item_background">#FFFFBB</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
 </resources>
