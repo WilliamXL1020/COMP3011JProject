@@ -4,20 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 顶部栏（搜索、用户等） -->
-    <include layout="@layout/toolbar" />
+    <!-- 分区栏 -->
+    <include layout="@layout/categorybar" />
 
-    <!-- 分区导航 -->
-    <!--<include layout="@layout/categorybar" />-->
-
-    <!-- Fragment容器 -->
+    <!-- 首页内容容器 -->
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/home_content_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <!-- 底部导航 -->
-    <include layout="@layout/bottombar" />
 
 </LinearLayout>

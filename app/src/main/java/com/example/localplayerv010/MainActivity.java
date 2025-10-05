@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupWithMockData();
+
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -55,16 +55,7 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        }
 //    }
-      private void setupWithMockData(){
-        List<VideoItem> videos = MockVideoService.getHomeVideo();
-          testFirstVideo(videos);
-      }
-      private void testFirstVideo(List<VideoItem> videos){
-          VideoItem firstVideo = videos.get(0);
-          Intent intent = new Intent(this, PlayerActivity.class);
-          intent.putExtra("video_data", firstVideo);
-          startActivity(intent);
-      }
+
 
 
 }

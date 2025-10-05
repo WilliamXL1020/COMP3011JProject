@@ -48,6 +48,7 @@ public class PlayerActivity extends AppCompatActivity {
     private VideoItem currentVideo;
     private boolean isFullscreen = false;
     private Toolbar toolbar;
+    private ImageButton btnBack;
 
     // 双击相关变量
     private long lastTapTime = 0;
@@ -66,6 +67,7 @@ public class PlayerActivity extends AppCompatActivity {
         InitializePlayer();
         setupWithExoController();
         setupCustomFullscreenButton();
+        setupCustomBackButton();
         setupDoubleTap();
         setupVideoInfoDisplay();
         setupRecommendations();
@@ -133,6 +135,16 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
 
+    //设置返回按钮
+    private void setupCustomBackButton() {
+        btnBack = findViewById(R.id.btn_custom_back);
+        btnBack.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
+        // 初始隐藏（跟随控制器显示）
+        btnBack.setVisibility(View.VISIBLE);
+    }
 
     //设置全屏按钮
     private void setupCustomFullscreenButton() {
@@ -253,9 +265,13 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onVisibilityChange(int visibility) {
                 ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
+                ImageButton btnBack = findViewById(R.id.btn_custom_back);
                 if (btnFullscreen != null) {
                     // 控制器显示时显示按钮，隐藏时隐藏按钮
                     btnFullscreen.setVisibility(visibility);
+                }
+                if (btnBack != null) {
+                    btnBack.setVisibility(visibility);
                 }
             }
         });

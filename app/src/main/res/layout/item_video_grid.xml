@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:padding="8dp"
+    android:background="@color/background"
+    android:layout_margin="4dp">
+
+    <!-- 图片容器 - 宽度通过权重控制 -->
+    <ImageView
+    android:id="@+id/iv_cover"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="3"
+    android:scaleType="centerCrop"
+    android:src="@drawable/default_avatar"
+    />
+
+    <!-- 信息区域 -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingTop="4dp">
+
+        <!-- 标题区域 -->
+        <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="视频标题"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:gravity="center_vertical"/>
+
+        <!-- 底部信息行 - 一左一右 -->
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+    <!-- 左边：上传者 -->
+            <TextView
+                android:id="@+id/tv_uploader"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="上传者"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"/>
+
+            <!-- 右边：播放量 -->
+            <TextView
+                android:id="@+id/tv_play_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="10万播放"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                android:gravity="center_vertical|end"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+

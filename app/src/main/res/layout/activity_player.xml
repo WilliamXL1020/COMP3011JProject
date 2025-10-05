@@ -29,6 +29,15 @@
             android:background="@drawable/ic_fullscreen"
             android:contentDescription="全屏"
             android:visibility="visible" />
+        <ImageButton
+            android:id="@+id/btn_custom_back"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_gravity="top|left"
+            android:layout_margin="16dp"
+            android:background="@drawable/ic_arrow_back"
+            android:contentDescription="返回"
+            android:visibility="visible" />
     </com.google.android.exoplayer2.ui.PlayerView>
 
 
