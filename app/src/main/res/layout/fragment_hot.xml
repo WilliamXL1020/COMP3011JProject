@@ -5,12 +5,6 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- 轮播图区域 -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/banner_pager"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"

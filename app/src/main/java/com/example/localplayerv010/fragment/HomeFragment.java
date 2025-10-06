@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
                 fragment = new HotFragment();
                 break;
             default:
-                fragment = new CategoryFragment();//CategoryFragment.newInstance(category);后续做传参区分分区时候写这一行
+                fragment = CategoryFragment.newInstance(category);//CategoryFragment.newInstance(category);后续做传参区分分区时候写这一行
                 break;
         }
 

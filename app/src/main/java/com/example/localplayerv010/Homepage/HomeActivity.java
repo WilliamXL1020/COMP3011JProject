@@ -20,7 +20,7 @@ import com.example.localplayerv010.fragment.HomeFragment;
 
 public class HomeActivity extends AppCompatActivity {
     private LinearLayout tabHome, tabFollow, tabUpload, tabVip, tabProfile;
-    private int currentTab = 0; // 0:首页, 1:关注, 2:上传, 3:VIP, 4:我的
+    private int currentTab = -1; // 0:首页, 1:关注, 2:上传, 3:VIP, 4:我的
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void switchTab(int tabPosition) {
+        boolean isFirstTime = (currentTab == -1); // 用-1表示初始状态
+        boolean isSameTab = (currentTab == tabPosition);
+
+        if (!isFirstTime && isSameTab) {
+            return;
+        }
+
         currentTab = tabPosition;
 
         // 重置所有tab状态

@@ -13,7 +13,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
+
 
 
 import com.example.localplayerv010.Player.PlayerActivity;
@@ -22,6 +24,7 @@ import com.example.localplayerv010.adapter.bannerAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
 import com.example.localplayerv010.adapter.videoRecyclerAdapter;
+import com.example.localplayerv010.utils.RefreshUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +39,7 @@ public class RecommendFragment extends Fragment {
     private Runnable autoScrollRunnable;
     private long AUTO_SCROLL_DELAY = 3000;
     private boolean isUserTouching = false;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +49,15 @@ public class RecommendFragment extends Fragment {
         setupBanner();
         recyclerView = view.findViewById(R.id.rv_video_list);
         setupRecyclerView();
+
         return view;
+    }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        swipeRefresh = view.findViewById(R.id.swipe_refresh);
+
+        // 一行代码，传入刷新时要执行的逻辑
+        RefreshUtils.setupRefresh(swipeRefresh, this::refreshRecommendData);
     }
 
     private void setupRecyclerView() {
@@ -154,6 +166,16 @@ public class RecommendFragment extends Fragment {
         if (autoScrollHandler != null && autoScrollRunnable != null) {
             autoScrollHandler.removeCallbacks(autoScrollRunnable);
         }
+    }
+
+    private void refreshRecommendData() {
+        // 完全个性化的业务逻辑
+        new Handler().postDelayed(() -> {
+            List<VideoItem> newVideos = processVideoData(MockVideoService.getHomeVideo());
+            adapter.setVideoList(newVideos);
+            RefreshUtils.stopRefresh(swipeRefresh);
+            Toast.makeText(getContext(), "推荐已更新", Toast.LENGTH_SHORT).show();
+        }, 300);
     }
 
     @Override

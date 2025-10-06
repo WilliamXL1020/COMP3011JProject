@@ -155,21 +155,27 @@
         <!-- 推荐标题 -->
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="推荐视频"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold"
             android:padding="10dp" />
 
-        <!-- 预留的推荐列表区域 -->
-        <ListView
-            android:id="@+id/lv_recommendations"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_recommend"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp" />
+            android:layout_weight="4">
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recommendations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

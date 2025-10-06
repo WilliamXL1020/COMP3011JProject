@@ -2,18 +2,17 @@ package com.example.localplayerv010.Player;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.media.browse.MediaBrowser;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,15 +21,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.localplayerv010.R;
-import com.example.localplayerv010.adapter.videoListAdapter;
+import com.example.localplayerv010.adapter.videoHotAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
+import com.example.localplayerv010.utils.RefreshUtils;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerControlView;
@@ -38,10 +37,13 @@ import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class PlayerActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefresh;
+    private videoHotAdapter adapter;
+    private List<VideoItem> recommendedVideos = new ArrayList<>();
     private SimpleExoPlayer player;
     private PlayerView playerView;
     private Button btnPlayer;
@@ -309,7 +311,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
     // 设置视频信息显示
     private void setupVideoInfoDisplay() {
-        // 绑定UI组件 - 你需要先在activity_player.xml中添加这些TextView
+        // 绑定UI组件
         TextView tvTitle = findViewById(R.id.tv_video_title);
         TextView tvUploader = findViewById(R.id.tv_uploader);
         TextView tvStats = findViewById(R.id.tv_video_stats);
@@ -350,34 +352,26 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void setupRecommendations() {
-        ListView listView = findViewById(R.id.lv_recommendations);
+        recyclerView = findViewById(R.id.rv_recommendations);
+        swipeRefresh = findViewById(R.id.swipe_refresh_recommend);
 
-        // 获取推荐视频数据（排除当前播放的视频）
-        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-        List<VideoItem> recommendedVideos = new ArrayList<>();
+        setupRecyclerView();
+        setupRefresh();
+        loadRecommendations();
+    }
 
-        // 调整筛选逻辑，不推荐自己，打乱顺序，以及后续要想办法对比标签
-        for (VideoItem video : allVideos) {
-            if (!video.getVideoId().equals(currentVideo.getVideoId())) {
-                recommendedVideos.add(video);
-            }
-        }
 
-        //打乱所有除自己外的推荐视频
-        Collections.shuffle(recommendedVideos);
+    private void setupRecyclerView() {
+        // 使用单列布局
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        //打乱后取前十个
-        if (recommendedVideos.size() > 10) {
-            recommendedVideos = recommendedVideos.subList(0, 10);
-        }
+        // 复用横向布局适配器
+        adapter = new videoHotAdapter(recommendedVideos);
+        recyclerView.setAdapter(adapter);
 
-        // 设置适配器
-        videoListAdapter adapter = new videoListAdapter(this, recommendedVideos);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            VideoItem selectedVideo = (VideoItem)adapter.getItem(position);
-
-            Log.d("VideoJump", "跳转到视频: " + selectedVideo.getTitle());
+        adapter.setOnItemClickListener((position, video) -> {
+            Log.d("VideoJump", "跳转到视频: " + video.getTitle());
 
             if (player != null && player.isPlaying()) {
                 player.pause();
@@ -385,10 +379,64 @@ public class PlayerActivity extends AppCompatActivity {
 
             // 创建新的播放页
             Intent intent = new Intent(PlayerActivity.this, PlayerActivity.class);
-            intent.putExtra("video_data", selectedVideo);
+            intent.putExtra("video_data", video);
             startActivity(intent);
         });
     }
+
+    private void setupRefresh() {
+        RefreshUtils.setupRefresh(swipeRefresh, this::refreshRecommendations);
+    }
+
+    private void loadRecommendations() {
+        // 获取推荐视频数据（排除当前播放的视频）
+        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+        recommendedVideos = processRecommendations(allVideos);
+        adapter.setVideoList(recommendedVideos);
+    }
+
+    private List<VideoItem> processRecommendations(List<VideoItem> allVideos) {
+        List<VideoItem> result = new ArrayList<>();
+
+        // 调整筛选逻辑，不推荐自己，打乱顺序
+        for (VideoItem video : allVideos) {
+            if (!video.getVideoId().equals(currentVideo.getVideoId())) {
+                result.add(video);
+            }
+        }
+
+        // 打乱所有除自己外的推荐视频
+        Collections.shuffle(result);
+
+        // 打乱后取前十个
+        if (result.size() > 10) {
+            result = result.subList(0, 10);
+        }
+
+        return result;
+    }
+
+    private void refreshRecommendations() {
+        new Handler().postDelayed(() -> {
+            List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+            List<VideoItem> newVideos = processRecommendations(allVideos);
+            adapter.setVideoList(newVideos);
+            RefreshUtils.stopRefresh(swipeRefresh);
+            Toast.makeText(this, "推荐已更新", Toast.LENGTH_SHORT).show();
+        }, 300);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void setupDoubleTap(){
         playerView.setOnTouchListener(new View.OnTouchListener(){

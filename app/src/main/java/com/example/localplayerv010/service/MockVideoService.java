@@ -15,11 +15,11 @@ public class MockVideoService {
             "https://media.w3.org/2010/05/sintel/trailer.mp4",
             "https://vjs.zencdn.net/v/oceans.mp4"
         };
-        String[] categories = {"游戏", "音乐", "生活", "知识", "科技"};
+        String[] categories = {"游戏", "音乐", "生活", "知识", "科技", "影视", "搞笑"};
         String[] uploaders = {"小明同学", "技术达人", "生活博主", "游戏高手", "音乐爱好者"};
 
-        // 创建20个模拟视频
-        for (int i = 1; i <= 20; i++) {
+        // 创建40个模拟视频
+        for (int i = 1; i <= 40; i++) {
             VideoItem video = new VideoItem();
             video.setVideoId("video_" + i);
             video.setTitle("精彩视频 " + i);
