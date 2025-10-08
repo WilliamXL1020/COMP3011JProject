@@ -261,8 +261,21 @@ public class VideoItem implements Parcelable {
         UploaderName = uploaderName;
     }
 
+    public String getThumbnailUrl() {
+        return ThumbnailUrl;
+    }
 
+    public void setThumbnailUrl(String thumbnailUrl) {
+        ThumbnailUrl = thumbnailUrl;
+    }
 
+    public String getThumbnailPath() {
+        return ThumbnailPath;
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        ThumbnailPath = thumbnailPath;
+    }
 
     //利用工具类获得格式化好的信息
     public String getFormatDuration(){

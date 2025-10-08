@@ -22,6 +22,7 @@ import com.example.localplayerv010.adapter.videoHotAdapter;
 import com.example.localplayerv010.adapter.videoRecyclerAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
+import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class CategoryFragment extends Fragment {
     private videoHotAdapter adapter;
     private List<VideoItem> categoryVideos = new ArrayList<>();
     private String categoryName;
+    private int currentPage;
+    private static final int VIDEOS_PER_PAGE = 20;
 
 
 
@@ -90,9 +93,24 @@ public class CategoryFragment extends Fragment {
     }
 
     private void loadCategoryData() {
-        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-        categoryVideos = filterVideosByCategory(allVideos, categoryName);
-        adapter.setVideoList(categoryVideos);
+       String searchQurey = getSearchQueryByCategory(categoryName);
+        VideoAPIService.searchVideos(searchQurey, 1, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                categoryVideos = videos;
+                adapter.setVideoList(categoryVideos);
+                currentPage = 1;
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+                List<VideoItem> filteredVideos = filterVideosByCategory(allVideos, categoryName);
+                adapter.setVideoList(filteredVideos);
+
+            }
+        });
     }
     private List<VideoItem> filterVideosByCategory(List<VideoItem> allVideos, String category) {
         List<VideoItem> result = new ArrayList<>();
@@ -109,15 +127,45 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    private void refreshCategoryData() {
-        new Handler().postDelayed(() -> {
-            List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-            List<VideoItem> newVideos = filterVideosByCategory(allVideos, categoryName);
+    private String getSearchQueryByCategory(String category) {
+        switch (category) {
+            case "游戏":
+                return "gaming";
+            case "音乐":
+                return "music";
+            case "影视":
+                return "movie";
+            case "知识":
+                return "education";
+            case "生活":
+                return "lifestyle";
+            case "搞笑":
+                return "funny";
+            default:
+                return category.toLowerCase(); // 默认使用分类名称的小写
+        }
+    }
 
-            Collections.shuffle(newVideos);
-            adapter.setVideoList(newVideos);
-            RefreshUtils.stopRefresh(swipeRefresh);
-            Toast.makeText(getContext(), categoryName + "视频已更新", Toast.LENGTH_SHORT).show();
-        }, 300);
+    private int generateRandomPage() {
+        return (int) (Math.random() * 10) + 1;
+    }
+
+
+    private void refreshCategoryData() {
+        String searchQuery = getSearchQueryByCategory(categoryName);
+        int randomPage = generateRandomPage();
+        VideoAPIService.searchVideos(searchQuery, randomPage, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                categoryVideos = videos;
+                adapter.setVideoList(categoryVideos);
+                currentPage = randomPage;
+                RefreshUtils.stopRefresh(swipeRefresh);
+            }
+            @Override
+            public void onFailure(String errorMessage){
+                RefreshUtils.stopRefresh(swipeRefresh);
+            }
+        });
     }
 }

@@ -13,6 +13,7 @@ import com.example.localplayerv010.model.VideoItem;
 
 import com.example.localplayerv010.Player.PlayerActivity;
 import com.example.localplayerv010.service.MockVideoService;
+import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.VideoUtils;
 
 import java.util.Date;
@@ -26,36 +27,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        testNetworkOnStart();
+
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
 //        testVideoScan();
     }
 
-//    private void testVideoScan() {
-//        // 调用扫描方法
-//        List<VideoItem> scannedVideos = VideoUtils.scanRealVideos(this);
-//
-//        // 检查扫描结果
-//        if (scannedVideos.isEmpty()) {
-//            Log.d("MainActivity", "没有扫描到视频文件");
-//            Toast.makeText(this, "没有找到MP4视频文件", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Log.d("MainActivity", "扫描到 " + scannedVideos.size() + " 个视频");
-//
-//            // 取第一个视频进行测试
-//            VideoItem firstVideo = scannedVideos.get(0);
-//            Log.d("MainActivity", "测试视频: " + firstVideo.getTitle() +
-//                    ", 大小: " + firstVideo.getFormattedFileSize() +
-//                    ", 路径: " + firstVideo.getVideoPath());
-//
-//            // 立即跳转到播放页测试显示
-//            Intent intent = new Intent(this, PlayerActivity.class);
-//            intent.putExtra("video_data", firstVideo);
-//            startActivity(intent);
-//        }
-//    }
 
+    private void testNetworkOnStart() {
+        new Thread(() -> {
+            boolean isConnected = VideoAPIService.testNetwork();
+
+            runOnUiThread(() -> {
+                if (isConnected) {
+                    Log.d("Network", "✅ Pexels API连接成功！");
+                    Toast.makeText(MainActivity.this, "网络连接正常", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("Network", "❌ Pexels API连接失败");
+                    Toast.makeText(MainActivity.this,
+                            "网络连接失败，请检查API密钥或网络", Toast.LENGTH_LONG).show();
+                }
+            });
+        }).start();
+    }
 
 
 }

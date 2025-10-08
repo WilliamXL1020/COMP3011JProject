@@ -24,6 +24,7 @@ import com.example.localplayerv010.adapter.bannerAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
 import com.example.localplayerv010.adapter.videoRecyclerAdapter;
+import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class RecommendFragment extends Fragment {
     private long AUTO_SCROLL_DELAY = 3000;
     private boolean isUserTouching = false;
     private SwipeRefreshLayout swipeRefresh;
+    private int currentPage = -1;
+    private static final int VIDEOS_PER_PAGE= 10;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,9 +70,9 @@ public class RecommendFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // 设置适配器
-        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-        List<VideoItem> displayVideos = processVideoData(allVideos);
-        adapter = new videoRecyclerAdapter(displayVideos);
+//        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+//        List<VideoItem> displayVideos = processVideoData(allVideos);
+        adapter = new videoRecyclerAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((position, video) -> {
@@ -77,7 +80,74 @@ public class RecommendFragment extends Fragment {
             intent.putExtra("video_data", video);
             startActivity(intent);
         });
+
+        loadRealVideos();
     }
+
+
+    private void loadRealVideos() {
+        // 首次加载使用第1页
+        VideoAPIService.getHomeVideo(1, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                List<VideoItem> displayVideos = processVideoData(videos);
+                adapter.setVideoList(displayVideos);
+                currentPage = 1; // 重置为第一页
+                Log.d("RecommendFragment", "首次加载第1页，获取 " + displayVideos.size() + " 个推荐视频");
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
+                List<VideoItem> displayVideos = processVideoData(fallbackVideos);
+                adapter.setVideoList(displayVideos);
+
+                Toast.makeText(getContext(), "推荐数据加载失败，使用本地数据", Toast.LENGTH_SHORT).show();
+                Log.e("RecommendFragment", "加载失败: " + errorMessage);
+            }
+        });
+    }
+
+    private void refreshRecommendData() {
+        // 生成随机页码（1-10页之间）
+        int randomPage = generateRandomPage();
+
+        VideoAPIService.getHomeVideo(randomPage, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                List<VideoItem> newVideos = processVideoData(videos);
+                adapter.setVideoList(newVideos);
+                currentPage = randomPage; // 更新当前页码
+                RefreshUtils.stopRefresh(swipeRefresh);
+                Toast.makeText(getContext(), "推荐已更新！第" + randomPage + "页", Toast.LENGTH_SHORT).show();
+                Log.d("RecommendFragment", "刷新加载第" + randomPage + "页，获取 " + newVideos.size() + " 个视频");
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
+                List<VideoItem> newVideos = processVideoData(fallbackVideos);
+                adapter.setVideoList(newVideos);
+                RefreshUtils.stopRefresh(swipeRefresh);
+                Toast.makeText(getContext(), "更新失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // 生成随机页码（1-10页）
+    private int generateRandomPage() {
+        return (int) (Math.random() * 10) + 1;
+    }
+
+
+
+
+
+
+
+
+
+
 
     private List<VideoItem> processVideoData(List<VideoItem> allVideos) {
         List<VideoItem> result = new ArrayList<>();
@@ -168,15 +238,6 @@ public class RecommendFragment extends Fragment {
         }
     }
 
-    private void refreshRecommendData() {
-        // 完全个性化的业务逻辑
-        new Handler().postDelayed(() -> {
-            List<VideoItem> newVideos = processVideoData(MockVideoService.getHomeVideo());
-            adapter.setVideoList(newVideos);
-            RefreshUtils.stopRefresh(swipeRefresh);
-            Toast.makeText(getContext(), "推荐已更新", Toast.LENGTH_SHORT).show();
-        }, 300);
-    }
 
     @Override
     public void onResume() {

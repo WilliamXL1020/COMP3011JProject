@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.model.VideoItem;
 
@@ -49,11 +52,27 @@ public class videoRecyclerAdapter extends RecyclerView.Adapter<videoRecyclerAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         VideoItem video = videoList.get(position);
 
+
+        if (video.getThumbnailUrl() != null && !video.getThumbnailUrl().isEmpty()) {
+            // 使用 Glide 加载网络图片
+            Glide.with(holder.itemView.getContext())
+                    .load(video.getThumbnailUrl())
+                    .placeholder(R.drawable.default_avatar) // 你的默认图片
+                    .error(R.drawable.default_avatar)       // 加载失败时
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // 添加磁盘缓存
+                    .skipMemoryCache(false) // 启用内存缓存
+                    .into(holder.ivCover);
+        } else {
+            holder.ivCover.setImageResource(R.drawable.default_avatar);
+        }
+
+        Log.d("AdapterDebug", "绑定位置: " + position +
+                ", 标题: " + video.getTitle() +
+                ", 路径: " + video.getVideoPath());
+
         holder.tvTitle.setText(video.getTitle());
         holder.tvUploader.setText(video.getUploaderName());
         holder.tvPlayCount.setText(video.getFormatPlayCount());
-        // 先用占位图
-        holder.ivCover.setImageResource(R.drawable.default_avatar);
 
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {

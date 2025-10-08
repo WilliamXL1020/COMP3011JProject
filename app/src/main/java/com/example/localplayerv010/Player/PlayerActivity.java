@@ -29,6 +29,7 @@ import com.example.localplayerv010.R;
 import com.example.localplayerv010.adapter.videoHotAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
+import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -74,6 +75,7 @@ public class PlayerActivity extends AppCompatActivity {
         setupVideoInfoDisplay();
         setupRecommendations();
     }
+
     @Override
     public void onBackPressed() {
         if (isFullscreen) {
@@ -86,6 +88,7 @@ public class PlayerActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -94,11 +97,13 @@ public class PlayerActivity extends AppCompatActivity {
             player = null;
         }
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d("Fullscreen", "方向变化: " + newConfig.orientation);
     }
+
     //搜索框焦点改变，当点击其他内容时候搜索框不涉及变化
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -204,10 +209,10 @@ public class PlayerActivity extends AppCompatActivity {
 
         findViewById(R.id.video_info_container).setVisibility(View.GONE);
         findViewById(R.id.recommendations_container).setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) playerView.getLayoutParams();
-            params.weight = 1;
-            params.height = LinearLayout.LayoutParams.MATCH_PARENT;
-            playerView.setLayoutParams(params);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) playerView.getLayoutParams();
+        params.weight = 1;
+        params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        playerView.setLayoutParams(params);
         playerView.post(() -> {
             playerView.requestLayout();
             playerView.invalidate();
@@ -280,18 +285,8 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     //初始化播放器的方法
-    private void InitializePlayer(){
+    private void InitializePlayer() {
         //创建播放器实例
         player = new SimpleExoPlayer.Builder(this).build();
         //将播放器绑定于视图
@@ -309,6 +304,7 @@ public class PlayerActivity extends AppCompatActivity {
         //自动播放
         player.play();
     }
+
     // 设置视频信息显示
     private void setupVideoInfoDisplay() {
         // 绑定UI组件
@@ -322,7 +318,6 @@ public class PlayerActivity extends AppCompatActivity {
         TextView tvCatagory = findViewById(R.id.tv_video_catagory);
 
 
-
         // 使用VideoItem的业务方法显示数据
         if (tvTitle != null) {
             tvTitle.setText(currentVideo.getTitle());
@@ -330,7 +325,7 @@ public class PlayerActivity extends AppCompatActivity {
         if (tvUploader != null) {
             tvUploader.setText("上传者: " + currentVideo.getUploaderName());
         }
-        if (tvStats != null){
+        if (tvStats != null) {
             tvStats.setText("播放次数:" + currentVideo.getPlayCount());
         }
         if (tvDescription != null) {
@@ -339,14 +334,14 @@ public class PlayerActivity extends AppCompatActivity {
         if (tvResolution != null) {
             tvResolution.setText(currentVideo.getFormatResolution());
         }
-        if (tvSize != null){
-            tvSize.setText("视频大小:"  + currentVideo.getFormattedFileSize());
+        if (tvSize != null) {
+            tvSize.setText("视频大小:" + currentVideo.getFormattedFileSize());
         }
-        if (tvUploadTime != null){
+        if (tvUploadTime != null) {
             tvUploadTime.setText("上传时间:" + currentVideo.getFormatUploadTime());
         }
-        if (tvCatagory != null){
-            tvCatagory.setText("标签："+currentVideo.getCategory());
+        if (tvCatagory != null) {
+            tvCatagory.setText("标签：" + currentVideo.getCategory());
         }
 
     }
@@ -390,9 +385,24 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void loadRecommendations() {
         // 获取推荐视频数据（排除当前播放的视频）
-        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-        recommendedVideos = processRecommendations(allVideos);
-        adapter.setVideoList(recommendedVideos);
+        VideoAPIService.getHomeVideo(1, 20, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                // 处理推荐数据（排除当前播放的视频）
+                List<VideoItem> processedVideos = processRecommendations(videos);
+                recommendedVideos = processedVideos;
+                adapter.setVideoList(recommendedVideos);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // 网络失败，使用备用数据
+                List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+                List<VideoItem> processedVideos = processRecommendations(allVideos);
+                recommendedVideos = processedVideos;
+                adapter.setVideoList(recommendedVideos);
+            }
+        });
     }
 
     private List<VideoItem> processRecommendations(List<VideoItem> allVideos) {
@@ -417,35 +427,40 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void refreshRecommendations() {
-        new Handler().postDelayed(() -> {
-            List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-            List<VideoItem> newVideos = processRecommendations(allVideos);
-            adapter.setVideoList(newVideos);
-            RefreshUtils.stopRefresh(swipeRefresh);
-            Toast.makeText(this, "推荐已更新", Toast.LENGTH_SHORT).show();
-        }, 300);
+        int randomPage = generateRandomPage();
+
+        VideoAPIService.getHomeVideo(randomPage, 20, new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                List<VideoItem> newVideos = processRecommendations(videos);
+                adapter.setVideoList(newVideos);
+                RefreshUtils.stopRefresh(swipeRefresh);
+                Toast.makeText(PlayerActivity.this, "推荐已更新", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                List<VideoItem> allVideos = MockVideoService.getHomeVideo();
+                List<VideoItem> newVideos = processRecommendations(allVideos);
+                adapter.setVideoList(newVideos);
+                RefreshUtils.stopRefresh(swipeRefresh);
+            }
+        });
+    }
+
+    private int generateRandomPage() {
+        return (int) (Math.random() * 10) + 1;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-    private void setupDoubleTap(){
-        playerView.setOnTouchListener(new View.OnTouchListener(){
+    private void setupDoubleTap() {
+        playerView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
-            public boolean onTouch(View v, MotionEvent event){
+            public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     long currentTime = System.currentTimeMillis();
-                    if (currentTime - lastTapTime < DOUBLE_TAP_DELAY){
+                    if (currentTime - lastTapTime < DOUBLE_TAP_DELAY) {
                         togglePlayPause();
                         return true;
                     }
@@ -455,7 +470,8 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
     }
-    private void togglePlayPause(){
+
+    private void togglePlayPause() {
         if (player != null) {
             if (player.isPlaying()) {
                 player.pause();

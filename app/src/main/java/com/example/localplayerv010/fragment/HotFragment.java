@@ -20,6 +20,7 @@ import com.example.localplayerv010.R;
 import com.example.localplayerv010.adapter.videoHotAdapter;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
+import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class HotFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_hot, container, false);
         recyclerView = view.findViewById(R.id.rv_video_list);
         setupRecyclerView();
-        loadHotData();
+        loadPopularVideos();
         return view;
     }
 
@@ -65,19 +66,48 @@ public class HotFragment extends Fragment {
         });
     }
 
-    private void loadHotData() {
-        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
-        hotVideos = processHotData(allVideos);
-        adapter.setVideoList(hotVideos);
+
+
+
+    private void loadPopularVideos() {
+        VideoAPIService.getPopularVideos(new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                hotVideos = videos; // 直接使用API返回的热门视频，不需要额外处理
+                adapter.setVideoList(hotVideos);
+                Log.d("HotFragment", "成功加载 " + hotVideos.size() + " 个热门视频");
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // 网络失败，使用备用数据
+                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
+                adapter.setVideoList(fallbackVideos);
+
+                Toast.makeText(getContext(), "热门数据加载失败，使用本地数据", Toast.LENGTH_SHORT).show();
+                Log.e("HotFragment", "加载失败: " + errorMessage);
+            }
+        });
     }
+
     private void refreshHotData() {
-        // 完全个性化的业务逻辑
-        new Handler().postDelayed(() -> {
-            List<VideoItem> newVideos = processHotData(MockVideoService.getHomeVideo());
-            adapter.setVideoList(newVideos);
-            RefreshUtils.stopRefresh(swipeRefresh);
-            Toast.makeText(getContext(), "热搜已更新", Toast.LENGTH_SHORT).show();
-        }, 300);
+         VideoAPIService.getPopularVideos(new VideoAPIService.VideoLoadCallback() {
+            @Override
+            public void onSuccess(List<VideoItem> videos) {
+                hotVideos = videos;
+                adapter.setVideoList(hotVideos);
+                RefreshUtils.stopRefresh(swipeRefresh);
+                Toast.makeText(getContext(), "热门视频已更新", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
+                adapter.setVideoList(fallbackVideos);
+                RefreshUtils.stopRefresh(swipeRefresh);
+                Toast.makeText(getContext(), "更新失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<VideoItem> processHotData(List<VideoItem> allVideos) {
