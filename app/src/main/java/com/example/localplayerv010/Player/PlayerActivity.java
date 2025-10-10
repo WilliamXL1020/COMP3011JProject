@@ -31,6 +31,7 @@ import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.service.MockVideoService;
 import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
+import com.example.localplayerv010.utils.SearchUtils;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerControlView;
@@ -67,6 +68,7 @@ public class PlayerActivity extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         //调用初始化完的播放器
         setupToolbar();
+        SearchUtils.setupEnterSearch(this);
         InitializePlayer();
         setupWithExoController();
         setupCustomFullscreenButton();

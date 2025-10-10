@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Homepage.HomeActivity"></activity>
+        <activity android:name=".SearchPage.SearchActivity"
+            android:exported="false"
+            android:launchMode="singleTop"></activity>
+        <activity android:name=".Homepage.HomeActivity" />
         <activity
             android:name=".Player.PlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

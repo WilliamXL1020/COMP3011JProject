@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.fragment.HomeFragment;
+import com.example.localplayerv010.utils.SearchUtils;
 
 public class HomeActivity extends AppCompatActivity {
     private LinearLayout tabHome, tabFollow, tabUpload, tabVip, tabProfile;
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        SearchUtils.setupEnterSearch(this);
 
         setupBottomNavigation();
     }

@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.localplayerv010.R;
+import com.example.localplayerv010.model.VideoItem;
 
 import java.util.List;
 
 public class bannerAdapter extends RecyclerView.Adapter<bannerAdapter.ViewHolder> {
     private List<Integer> bannerList;
+    private List<VideoItem> videoList;
 
     public bannerAdapter(List<Integer> bannerList ){
         this.bannerList = bannerList;

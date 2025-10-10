@@ -125,7 +125,6 @@ public class VideoConverter {
 
         // 如果还没有，返回第一个文件
         String firstUrl = pexelsVideo.getVideo_files().get(0).getLink();
-        Log.d("VideoConverter", "✅ 返回第一个文件: " + firstUrl);
         return firstUrl;
     }
 
