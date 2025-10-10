@@ -43,15 +43,18 @@ public class RecommendFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private int currentPage = -1;
     private static final int VIDEOS_PER_PAGE= 10;
+    private List<VideoItem> allVideos = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recommend, container, false);
-        // 初始化轮播图（可选，可以先注释掉）
+
         bannerPager = view.findViewById(R.id.banner_pager);
-        setupBanner();
         recyclerView = view.findViewById(R.id.rv_video_list);
         setupRecyclerView();
+
+        setupBanner();
+
 
         return view;
     }
@@ -86,24 +89,34 @@ public class RecommendFragment extends Fragment {
 
 
     private void loadRealVideos() {
-        // 首次加载使用第1页
         VideoAPIService.getHomeVideo(1, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
+                // 保存数据到allVideos
+                allVideos = videos;
+
                 List<VideoItem> displayVideos = processVideoData(videos);
                 adapter.setVideoList(displayVideos);
-                currentPage = 1; // 重置为第一页
+                currentPage = 1;
+
+                // 调用setupBanner，使用已有的allVideos
+                setupBanner();
+
                 Log.d("RecommendFragment", "首次加载第1页，获取 " + displayVideos.size() + " 个推荐视频");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
-                List<VideoItem> displayVideos = processVideoData(fallbackVideos);
+                // 保存Mock数据到allVideos
+                allVideos = MockVideoService.getHomeVideo();
+
+                List<VideoItem> displayVideos = processVideoData(allVideos);
                 adapter.setVideoList(displayVideos);
 
+                // 调用setupBanner
+                setupBanner();
+
                 Toast.makeText(getContext(), "推荐数据加载失败，使用本地数据", Toast.LENGTH_SHORT).show();
-                Log.e("RecommendFragment", "加载失败: " + errorMessage);
             }
         });
     }
@@ -115,19 +128,31 @@ public class RecommendFragment extends Fragment {
         VideoAPIService.getHomeVideo(randomPage, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
+                // 保存数据到allVideos
+                allVideos = videos;
+
                 List<VideoItem> newVideos = processVideoData(videos);
                 adapter.setVideoList(newVideos);
-                currentPage = randomPage; // 更新当前页码
+                currentPage = randomPage;
+
+                // 调用setupBanner
+                setupBanner();
+
                 RefreshUtils.stopRefresh(swipeRefresh);
                 Toast.makeText(getContext(), "推荐已更新！第" + randomPage + "页", Toast.LENGTH_SHORT).show();
-                Log.d("RecommendFragment", "刷新加载第" + randomPage + "页，获取 " + newVideos.size() + " 个视频");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
-                List<VideoItem> newVideos = processVideoData(fallbackVideos);
+                // 保存Mock数据到allVideos
+                allVideos = MockVideoService.getHomeVideo();
+
+                List<VideoItem> newVideos = processVideoData(allVideos);
                 adapter.setVideoList(newVideos);
+
+                // 调用setupBanner
+                setupBanner();
+
                 RefreshUtils.stopRefresh(swipeRefresh);
                 Toast.makeText(getContext(), "更新失败: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
@@ -170,17 +195,21 @@ public class RecommendFragment extends Fragment {
 
 
     private void setupBanner() {
-        List<Integer> bannerImages = Arrays.asList(
-                R.drawable.default_avatar,
-                R.drawable.default_avatar,
-                R.drawable.banner
-        );
-        bannerAdapter bannerAdapter = new bannerAdapter(bannerImages);
-        bannerPager.setAdapter(bannerAdapter);
+        if (allVideos == null || allVideos.isEmpty() || bannerPager == null) return;
+        try {
+            List<VideoItem> bannerVideos = new ArrayList<>();
+            for (int i = 0; i < Math.min(allVideos.size(), 5); i++) {
+                bannerVideos.add(allVideos.get(i));
+            }
 
-        bannerPager.setOffscreenPageLimit(3);
+            bannerAdapter adapter = new bannerAdapter(bannerVideos);
+            bannerPager.setAdapter(adapter);
 
+        } catch (Exception e) {
+            Log.e("BannerDebug", "banner错误: " + e.getMessage());
+        }
 
+        bannerPager.setOffscreenPageLimit(5);
         bannerPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -206,6 +235,7 @@ public class RecommendFragment extends Fragment {
         startAutoScroll();
 
     }
+
 
     private void startAutoScroll() {
         stopAutoScroll();

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.model.VideoItem;
 
@@ -18,8 +19,8 @@ public class bannerAdapter extends RecyclerView.Adapter<bannerAdapter.ViewHolder
     private List<Integer> bannerList;
     private List<VideoItem> videoList;
 
-    public bannerAdapter(List<Integer> bannerList ){
-        this.bannerList = bannerList;
+    public bannerAdapter(List<VideoItem> videoList ){
+        this.videoList = videoList;
     }
 
     @NonNull
@@ -31,12 +32,21 @@ public class bannerAdapter extends RecyclerView.Adapter<bannerAdapter.ViewHolder
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        VideoItem video = videoList.get(position);
         // 只需要设置图片，不需要设置点击事件
-        holder.bannerCover.setImageResource(bannerList.get(position));
+        if (video.getThumbnailUrl() != null && !video.getThumbnailUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(video.getThumbnailUrl())
+                    .placeholder(R.drawable.default_avatar)
+                    .error(R.drawable.default_avatar)
+                    .into(holder.bannerCover);
+        } else {
+            holder.bannerCover.setImageResource(R.drawable.default_avatar);
+        }
     }
     @Override
     public int getItemCount() {
-        return  Math.min(bannerList.size(), 5);
+        return  Math.min(videoList.size(), 5);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
