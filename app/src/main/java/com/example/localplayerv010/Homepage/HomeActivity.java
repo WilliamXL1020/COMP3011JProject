@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.fragment.HomeFragment;
+import com.example.localplayerv010.fragment.ProfileFragment;
 import com.example.localplayerv010.utils.SearchUtils;
 
 public class HomeActivity extends AppCompatActivity {
@@ -97,9 +98,17 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case 4: // 我的
                 setTabSelected(tabProfile, true);
-//                showProfileFragment();
+                showProfileFragment();
                 break;
         }
+    }
+
+
+    private void showProfileFragment() {
+        ProfileFragment fragment = new ProfileFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 
     private void resetAllTabs() {

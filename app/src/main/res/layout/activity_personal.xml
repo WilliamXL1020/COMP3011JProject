@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <include layout="@layout/toolbar" />
 
     <!-- 个人信息主要内容区域 -->
     <ScrollView
@@ -335,6 +334,6 @@
 
     </ScrollView>
 
-    <include layout="@layout/bottombar" />
+
 
 </LinearLayout>

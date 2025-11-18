@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        UserPrefs.logout(this);
         // 测试网络连接（可选，根据你的需求决定是否保留）
         testNetworkOnStart();
 
