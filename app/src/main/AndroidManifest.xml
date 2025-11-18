@@ -12,9 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchPage.SearchActivity"
+        <activity
+            android:name=".auth.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".auth.RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SearchPage.SearchActivity"
             android:exported="false"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
         <activity android:name=".Homepage.HomeActivity" />
         <activity
             android:name=".Player.PlayerActivity"

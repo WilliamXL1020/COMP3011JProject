@@ -1,0 +1,109 @@
+package com.example.localplayerv010.auth;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.localplayerv010.Homepage.HomeActivity;
+import com.example.localplayerv010.R;
+import com.example.localplayerv010.service.UserService;
+import com.example.localplayerv010.utils.UserPrefs;
+
+public class LoginActivity extends AppCompatActivity {
+    private EditText etUsernameOrEmail, etPassword;
+    private Button btnLogin;
+    private TextView tvRegisterLink;
+    private UserService userService;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        initViews();
+        userService = new UserService(this);
+
+        setupClickListeners();
+        checkAutoLogin();
+    }
+
+    private void initViews() {
+        etUsernameOrEmail = findViewById(R.id.et_username_or_email);
+        etPassword = findViewById(R.id.et_password);
+        btnLogin = findViewById(R.id.btn_login);
+        tvRegisterLink = findViewById(R.id.tv_register_link);
+    }
+
+    private void setupClickListeners() {
+        btnLogin.setOnClickListener(v -> attemptLogin());
+        tvRegisterLink.setOnClickListener(v -> navigateToRegister());
+    }
+
+    private void attemptLogin() {
+        String usernameOrEmail = etUsernameOrEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        if (validateInputs(usernameOrEmail, password)) {
+            loginUser(usernameOrEmail, password);
+        }
+    }
+
+    private boolean validateInputs(String usernameOrEmail, String password) {
+        if (usernameOrEmail.isEmpty()) {
+            etUsernameOrEmail.setError("请输入用户名或邮箱");
+            return false;
+        }
+        if (password.isEmpty()) {
+            etPassword.setError("请输入密码");
+            return false;
+        }
+        return true;
+    }
+
+    private void loginUser(String usernameOrEmail, String password) {
+        btnLogin.setEnabled(false);
+        btnLogin.setText("登录中...");
+
+        userService.login(usernameOrEmail, password, new UserService.LoginCallback() {
+            @Override
+            public void onSuccess(com.example.localplayerv010.model.User user) {
+                runOnUiThread(() -> {
+                    // 保存登录状态
+                    UserPrefs.saveUserInfo(LoginActivity.this, user.getId(), user.getUsername(), user.getEmail());
+                    Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
+                    navigateToHome();
+                });
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                runOnUiThread(() -> {
+                    btnLogin.setEnabled(true);
+                    btnLogin.setText("登录");
+                    Toast.makeText(LoginActivity.this, "登录失败: " + errorMessage, Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
+
+    private void checkAutoLogin() {
+        if (UserPrefs.isLoggedIn(this)) {
+            navigateToHome();
+        }
+    }
+
+    private void navigateToHome() {
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
+    }
+
+    private void navigateToRegister() {
+        startActivity(new Intent(this, RegisterActivity.class));
+        finish();
+    }
+}
