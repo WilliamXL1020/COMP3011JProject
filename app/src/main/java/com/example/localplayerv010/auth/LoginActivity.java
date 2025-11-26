@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.localplayerv010.Homepage.HomeActivity;
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.service.UserService;
-import com.example.localplayerv010.utils.UserPrefs;
+import com.example.localplayerv010.service.UserPrefs;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etUsernameOrEmail, etPassword;

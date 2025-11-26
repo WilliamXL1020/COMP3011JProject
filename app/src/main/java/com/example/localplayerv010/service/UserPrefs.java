@@ -1,4 +1,4 @@
-package com.example.localplayerv010.utils;
+package com.example.localplayerv010.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -15,7 +15,7 @@ import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.Player.PlayerActivity;
 import com.example.localplayerv010.service.MockVideoService;
 import com.example.localplayerv010.service.VideoAPIService;
-import com.example.localplayerv010.utils.UserPrefs;
+import com.example.localplayerv010.service.UserPrefs;
 import com.example.localplayerv010.utils.VideoUtils;
 
 import java.util.Date;

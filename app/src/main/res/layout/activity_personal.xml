@@ -6,6 +6,7 @@
     android:background="#F5F5F5">
 
 
+
     <!-- 个人信息主要内容区域 -->
     <ScrollView
         android:layout_width="match_parent"
@@ -263,7 +264,7 @@
                     android:layout_height="1dp"
                     android:background="#EEEEEE" />
 
-                <!-- 收藏 -->
+                <!-- 我的收藏 -->
                 <LinearLayout
                     android:id="@+id/layout_favorites"
                     android:layout_width="match_parent"
@@ -284,6 +285,50 @@
                         android:layout_weight="1"
                         android:text="我的收藏"
                         android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_forward"
+                        android:tint="#999999" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE" />
+
+                <!-- 浏览记录 -->
+                <LinearLayout
+                    android:id="@+id/layout_browse_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_history"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="浏览记录"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_history_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="14sp"
+                        android:textColor="#999999"
+                        android:layout_marginEnd="8dp" />
 
                     <ImageView
                         android:layout_width="16dp"

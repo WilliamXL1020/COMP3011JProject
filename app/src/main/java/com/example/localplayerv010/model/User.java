@@ -1,6 +1,8 @@
 package com.example.localplayerv010.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
@@ -9,13 +11,21 @@ public class User {
     private int id;
 
     private String username;
+
     private String email;
+
     private String password;
+
     private String avatarUrl;
+
     private long createTime;
+
     private long lastLoginTime;
 
+
+
     // 构造方法
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

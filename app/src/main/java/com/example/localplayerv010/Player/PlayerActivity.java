@@ -28,11 +28,13 @@ import android.widget.Toast;
 import com.example.localplayerv010.R;
 import com.example.localplayerv010.adapter.videoHotAdapter;
 import com.example.localplayerv010.model.VideoItem;
+import com.example.localplayerv010.service.BrowseHistoryService;
 import com.example.localplayerv010.service.MockVideoService;
 import com.example.localplayerv010.service.VideoAPIService;
 import com.example.localplayerv010.utils.RefreshUtils;
 import com.example.localplayerv010.utils.SearchUtils;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PlayerActivity extends AppCompatActivity {
+    private BrowseHistoryService historyService;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefresh;
     private videoHotAdapter adapter;
@@ -67,6 +70,7 @@ public class PlayerActivity extends AppCompatActivity {
         //初始化组件
         playerView = findViewById(R.id.player_view);
         //调用初始化完的播放器
+        historyService = new BrowseHistoryService(this);
         setupToolbar();
         SearchUtils.setupEnterSearch(this);
         InitializePlayer();
@@ -116,6 +120,12 @@ public class PlayerActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void recordBrowseHistory() {
+        if (currentVideo != null) {
+            historyService.recordBrowse(currentVideo);
+        }
     }
 //    private void createMockVideoData() {
 //        currentVideo = new VideoItem();
@@ -301,7 +311,18 @@ public class PlayerActivity extends AppCompatActivity {
 
         //设置让媒体播放器开始播放
         player.setMediaItem(mediaItem);
+
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == Player.STATE_READY) {
+                    Log.d("PlayerDebug", "播放器准备就绪，记录浏览历史");
+                    recordBrowseHistory();
+                }
+            }
+        });
         player.prepare();
+
 
         //自动播放
         player.play();
