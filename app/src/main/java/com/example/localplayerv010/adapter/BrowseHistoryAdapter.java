@@ -18,6 +18,24 @@ import java.util.Locale;
 
 public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdapter.ViewHolder> {
     private List<BrowseHistory> historyList = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
+    private OnContinueWatchClickListener onContinueWatchClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, BrowseHistory history);
+    }
+
+    public interface OnContinueWatchClickListener {
+        void onContinueWatchClick(int position, BrowseHistory history);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public void setOnContinueWatchClickListener(OnContinueWatchClickListener listener) {
+        this.onContinueWatchClickListener = listener;
+    }
 
     public void setHistoryList(List<BrowseHistory> historyList) {
         this.historyList = historyList;
@@ -36,14 +54,35 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BrowseHistory history = historyList.get(position);
 
+        // 设置数据
         holder.tvVideoTitle.setText(history.getVideoTitle());
         holder.tvCategory.setText(history.getCategory());
         holder.tvWatchTime.setText(formatWatchTime(history.getWatchTime()));
         holder.tvWatchDuration.setText("观看" + formatDuration(history.getWatchDuration()));
 
-        // 删除按钮功能（可选）
+        // 设置续看按钮
+        if (history.getLastPosition() > 0) {
+            holder.tvLastPosition.setVisibility(View.VISIBLE);
+            holder.tvLastPosition.setText("续看");
+            holder.tvLastPosition.setOnClickListener(v -> {
+                if (onContinueWatchClickListener != null) {
+                    onContinueWatchClickListener.onContinueWatchClick(position, history);
+                }
+            });
+        } else {
+            holder.tvLastPosition.setVisibility(View.GONE);
+        }
+
+        // 设置整个item点击事件
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position, history);
+            }
+        });
+
+        // 删除按钮（暂时不实现功能）
         holder.btnDelete.setOnClickListener(v -> {
-            // 这里可以添加删除功能
+            // 待实现删除功能
         });
     }
 
@@ -54,7 +93,7 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageButton btnDelete;
-        TextView tvVideoTitle, tvCategory, tvWatchTime, tvWatchDuration;
+        TextView tvVideoTitle, tvCategory, tvWatchTime, tvWatchDuration, tvLastPosition;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +102,7 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
             tvCategory = itemView.findViewById(R.id.tv_category);
             tvWatchTime = itemView.findViewById(R.id.tv_watch_time);
             tvWatchDuration = itemView.findViewById(R.id.tv_watch_duration);
+            tvLastPosition = itemView.findViewById(R.id.tv_last_position);
         }
     }
 

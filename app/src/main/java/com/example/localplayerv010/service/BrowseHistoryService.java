@@ -44,11 +44,11 @@ public class BrowseHistoryService {
                     // 更新现有记录
                     existingHistory.setWatchTime(new java.util.Date());
                     existingHistory.setLastPosition(video.getLastPlayPosition());
-                    existingHistory.setWatchDuration(existingHistory.getWatchDuration() + 10000); // 假设每次观看增加10秒
+                    existingHistory.setWatchDuration(existingHistory.getWatchDuration() + 10000);
                     historyDao.updateHistory(existingHistory);
                     Log.d("BrowseHistory", "更新浏览记录: " + video.getTitle());
                 } else {
-                    // 创建新记录
+                    // 创建新记录 - 保存完整的视频信息
                     BrowseHistory history = new BrowseHistory(
                             userId,
                             video.getVideoId(),
@@ -56,7 +56,7 @@ public class BrowseHistoryService {
                             video.getCategory()
                     );
                     history.setLastPosition(video.getLastPlayPosition());
-                    history.setWatchDuration(10000); // 初始观看时长10秒
+
 
                     long id = historyDao.insertHistory(history);
                     Log.d("BrowseHistory", "新增浏览记录: " + video.getTitle() + ", ID: " + id);

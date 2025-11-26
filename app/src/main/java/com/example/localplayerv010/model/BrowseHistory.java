@@ -24,6 +24,7 @@ public class BrowseHistory {
     private Date watchTime;     // 观看时间
     private long lastPosition;  // 最后观看位置
 
+
     public BrowseHistory(int userId, String videoId, String videoTitle, String category) {
         this.userId = userId;
         this.videoId = videoId;
@@ -58,4 +59,5 @@ public class BrowseHistory {
 
     public long getLastPosition() { return lastPosition; }
     public void setLastPosition(long lastPosition) { this.lastPosition = lastPosition; }
+
 }

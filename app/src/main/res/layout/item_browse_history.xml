@@ -92,9 +92,11 @@
                 android:text="续看"
                 android:textSize="11sp"
                 android:textColor="@color/red"
-                android:background="@color/white"
+                android:background="@color/black"
                 android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp" />
+                android:paddingVertical="2dp"
+                android:clickable="true"
+                android:focusable="true" />
 
         </LinearLayout>
 
