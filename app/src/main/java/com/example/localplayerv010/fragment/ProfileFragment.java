@@ -20,7 +20,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView tvUsername, tvEmail, tvUserId;
     private ImageView ivAvatar;
-    private View layoutBrowseHistory; // 添加这个引用
+    private View layoutBrowseHistory; // Add this reference
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -33,7 +33,7 @@ public class ProfileFragment extends Fragment {
 
         initViews(view);
         loadUserInfo();
-        setupClickListeners(view); // 传入view参数
+        setupClickListeners(view); // Passing view parameter
         updateHistoryCount();
 
         return view;
@@ -44,31 +44,31 @@ public class ProfileFragment extends Fragment {
         tvUserId = view.findViewById(R.id.tv_user_id);
         ivAvatar = view.findViewById(R.id.iv_avatar);
 
-        // 初始化浏览记录布局
+        // Initialize browsing history layout
         layoutBrowseHistory = view.findViewById(R.id.layout_browse_history);
 
-        // 如果布局中没有这些视图，可以先用Toast显示信息
+        // If these views are not in the layout, you can first display the information using a Toast
         if (tvUsername == null) {
-            Toast.makeText(getContext(), "个人信息页面 - 开发中", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Personal Information Page - Under Development", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setupClickListeners(View view) { // 修改方法签名，传入view参数
-        // 头像点击
+    private void setupClickListeners(View view) { // Modify the method signature and pass in the view parameter
+        // Click on profile picture
         if (ivAvatar != null) {
             ivAvatar.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "头像点击 - 功能开发中", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Avatar Click - Feature Under Development", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // 浏览记录点击 - 使用传入的view来findViewById
+        // Browsing history clicks - use the passed-in view to findViewById
         if (layoutBrowseHistory != null) {
             layoutBrowseHistory.setOnClickListener(v -> {
                 navigateToBrowseHistory();
             });
         } else {
-            // 调试信息
-            Toast.makeText(getContext(), "浏览记录入口未找到", Toast.LENGTH_SHORT).show();
+            // Debugging information
+            Toast.makeText(getContext(), "Browsing history entry not found", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
                     .addToBackStack("browse_history")
                     .commit();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "跳转失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Redirect failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -90,10 +90,10 @@ public class ProfileFragment extends Fragment {
             String email = UserPrefs.getCurrentEmail(getContext());
             int userId = UserPrefs.getCurrentUserId(getContext());
 
-            if (tvUsername != null) tvUsername.setText("用户名: " + username);
-            if (tvUserId != null) tvUserId.setText("用户ID: " + userId);
+            if (tvUsername != null) tvUsername.setText("username: " + username);
+            if (tvUserId != null) tvUserId.setText("UserID: " + userId);
         } else {
-            if (tvUsername != null) tvUsername.setText("未登录");
+            if (tvUsername != null) tvUsername.setText("Not logged in");
             if (tvUserId != null) tvUserId.setText("");
         }
     }
@@ -118,11 +118,11 @@ public class ProfileFragment extends Fragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    // 静默失败，不显示错误
+                    // Silence failed, no error displayed
                 }
             });
         } catch (Exception e) {
-            // 忽略错误
+            // Ignore errors
         }
     }
 }

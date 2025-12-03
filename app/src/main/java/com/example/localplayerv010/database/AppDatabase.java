@@ -28,12 +28,12 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract BrowseHistoryDao browseHistoryDao();
 
 
-    // 单例模式
+    // Singleton pattern
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
-                    // 先修复空的users表
+                    // First, repair the empty users table.
                     fixEmptyUsersTable(context);
 
                     instance = Room.databaseBuilder(
@@ -45,13 +45,13 @@ public abstract class AppDatabase extends RoomDatabase {
                                 @Override
                                 public void onOpen(@NonNull SupportSQLiteDatabase db) {
                                     super.onOpen(db);
-                                    Log.d("Database", "✅ 数据库打开成功，表结构正确");
+                                    Log.d("Database", "✅ Database opened successfully, table structure is correct");
                                 }
 
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
-                                    Log.d("Database", "✅ 新数据库创建成功");
+                                    Log.d("Database", "✅ New database created successfully.");
                                 }
                             })
                             .build();
@@ -64,27 +64,27 @@ public abstract class AppDatabase extends RoomDatabase {
     private static void fixEmptyUsersTable(Context context) {
         try {
             File dbFile = context.getDatabasePath("local_player_db");
-            Log.d("Fix", "检查数据库文件: " + dbFile.exists());
+            Log.d("Fix", "Check database files: " + dbFile.exists());
 
             if (dbFile.exists()) {
                 SQLiteDatabase db = SQLiteDatabase.openDatabase(
                         dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE
                 );
 
-                // 检查users表是否有列
+                // Check if the users table has a column.
                 Cursor cursor = db.rawQuery("PRAGMA table_info(users)", null);
                 int columnCount = cursor != null ? cursor.getCount() : 0;
-                Log.d("Fix", "users表列数: " + columnCount);
+                Log.d("Fix", "Number of columns in users table: " + columnCount);
 
                 if (cursor != null) {
                     cursor.close();
                 }
 
                 if (columnCount == 0) {
-                    Log.d("Fix", "🔧 修复空的users表...");
-                    // 删除空的users表
+                    Log.d("Fix", "🔧 Repair the empty users table...");
+                    // Delete the empty users table
                     db.execSQL("DROP TABLE IF EXISTS users");
-                    // 创建正确的users表
+                    // Create the correct users table
                     db.execSQL("CREATE TABLE users (" +
                             "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                             "username TEXT, " +
@@ -93,9 +93,9 @@ public abstract class AppDatabase extends RoomDatabase {
                             "avatarUrl TEXT, " +
                             "createTime INTEGER NOT NULL, " +
                             "lastLoginTime INTEGER NOT NULL)");
-                    Log.d("Fix", "✅ 空的users表修复完成");
+                    Log.d("Fix", "✅ The empty users table has been repaired.");
                 } else {
-                    Log.d("Fix", "✅ users表结构正常");
+                    Log.d("Fix", "✅ The users table structure is normal.");
                 }
 
                 db.close();

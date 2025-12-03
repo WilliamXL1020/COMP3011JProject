@@ -27,28 +27,28 @@ public class BrowseHistoryService {
         this.executor = Executors.newSingleThreadExecutor();
     }
 
-    // 记录浏览历史
+    // Record browsing history
     public void recordBrowse(VideoItem video) {
         executor.execute(() -> {
             try {
                 int userId = UserPrefs.getCurrentUserId(context);
                 if (userId == -1) {
-                    Log.d("BrowseHistory", "用户未登录，跳过记录浏览历史");
+                    Log.d("BrowseHistory", "The user is not logged in; browsing history will be skipped.");
                     return;
                 }
 
-                // 检查是否已存在该视频的记录
+               // Check if the video already exists.
                 BrowseHistory existingHistory = historyDao.getHistoryByVideo(userId, video.getVideoId());
 
                 if (existingHistory != null) {
-                    // 更新现有记录
+                    // Update existing records
                     existingHistory.setWatchTime(new java.util.Date());
                     existingHistory.setLastPosition(video.getLastPlayPosition());
                     existingHistory.setWatchDuration(existingHistory.getWatchDuration() + 10000);
                     historyDao.updateHistory(existingHistory);
-                    Log.d("BrowseHistory", "更新浏览记录: " + video.getTitle());
+                    Log.d("BrowseHistory", "Update browsing history: " + video.getTitle());
                 } else {
-                    // 创建新记录 - 保存完整的视频信息
+                    // Create a new record - save complete video information
                     BrowseHistory history = new BrowseHistory(
                             userId,
                             video.getVideoId(),
@@ -59,13 +59,13 @@ public class BrowseHistoryService {
 
 
                     long id = historyDao.insertHistory(history);
-                    Log.d("BrowseHistory", "新增浏览记录: " + video.getTitle() + ", ID: " + id);
+                    Log.d("BrowseHistory", "Add browsing history: " + video.getTitle() + ", ID: " + id);
 
-                    // 清理超出100条的旧记录
+                    // Clean up more than 100 old records
                     historyDao.cleanOldHistory(userId);
                 }
             } catch (Exception e) {
-                Log.e("BrowseHistory", "记录浏览历史失败: " + e.getMessage());
+                Log.e("BrowseHistory", "Failed to record browsing history: " + e.getMessage());
             }
         });
     }
@@ -76,50 +76,50 @@ public class BrowseHistoryService {
             try {
                 int userId = UserPrefs.getCurrentUserId(context);
                 if (userId == -1) {
-                    callback.onFailure("用户未登录");
+                    callback.onFailure("User not logged in");
                     return;
                 }
 
                 List<BrowseHistory> history = historyDao.getRecentHistory(userId);
                 callback.onSuccess(history);
             } catch (Exception e) {
-                callback.onFailure("获取浏览记录失败: " + e.getMessage());
+                callback.onFailure("Failed to retrieve browsing history: " + e.getMessage());
             }
         });
     }
 
-    // 获取分类统计
+    // Get category statistics
     public void getCategoryStats(StatsCallback callback) {
         executor.execute(() -> {
             try {
                 int userId = UserPrefs.getCurrentUserId(context);
                 if (userId == -1) {
-                    callback.onFailure("用户未登录");
+                    callback.onFailure("User not logged in");
                     return;
                 }
 
                 List<BrowseHistoryDao.CategoryCount> stats = historyDao.getCategoryStats(userId);
                 callback.onSuccess(stats);
             } catch (Exception e) {
-                callback.onFailure("获取统计失败: " + e.getMessage());
+                callback.onFailure("Statistics failed to be retrieved: " + e.getMessage());
             }
         });
     }
 
-    // 清空浏览记录
+    // Clear browsing history
     public void clearHistory(ClearCallback callback) {
         executor.execute(() -> {
             try {
                 int userId = UserPrefs.getCurrentUserId(context);
                 if (userId == -1) {
-                    callback.onFailure("用户未登录");
+                    callback.onFailure("User not logged in");
                     return;
                 }
 
                 int deletedCount = historyDao.clearUserHistory(userId);
                 callback.onSuccess(deletedCount);
             } catch (Exception e) {
-                callback.onFailure("清空记录失败: " + e.getMessage());
+                callback.onFailure("Clearing records failed: " + e.getMessage());
             }
         });
     }

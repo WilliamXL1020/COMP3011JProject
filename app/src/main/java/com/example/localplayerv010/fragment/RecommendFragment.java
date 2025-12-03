@@ -62,17 +62,17 @@ public class RecommendFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         swipeRefresh = view.findViewById(R.id.swipe_refresh);
 
-        // 一行代码，传入刷新时要执行的逻辑
+        // One line of code, passing in the logic to be executed upon refresh
         RefreshUtils.setupRefresh(swipeRefresh, this::refreshRecommendData);
     }
 
     private void setupRecyclerView() {
 
-        //设置好一个两列视频的布局
+        // Set up a two-column video layout
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 设置适配器
+        // Set up the adapter
 //        List<VideoItem> allVideos = MockVideoService.getHomeVideo();
 //        List<VideoItem> displayVideos = processVideoData(allVideos);
         adapter = new videoRecyclerAdapter(new ArrayList<>());
@@ -92,31 +92,31 @@ public class RecommendFragment extends Fragment {
         VideoAPIService.getHomeVideo(1, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
-                // 保存数据到allVideos
+                // Save data to all Videos
                 allVideos = videos;
 
                 List<VideoItem> displayVideos = processVideoData(videos);
                 adapter.setVideoList(displayVideos);
                 currentPage = 1;
 
-                // 调用setupBanner，使用已有的allVideos
+                // Call setupBanner to use the existing allVideosvideos
                 setupBanner();
 
-                Log.d("RecommendFragment", "首次加载第1页，获取 " + displayVideos.size() + " 个推荐视频");
+                Log.d("RecommendFragment", "First time loading page 1, retrieve " + displayVideos.size() + " recommended video");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                // 保存Mock数据到allVideos
+                // Save Mock data to allVideos
                 allVideos = MockVideoService.getHomeVideo();
 
                 List<VideoItem> displayVideos = processVideoData(allVideos);
                 adapter.setVideoList(displayVideos);
 
-                // 调用setupBanner
+                // Call setupBanner
                 setupBanner();
 
-                Toast.makeText(getContext(), "推荐数据加载失败，使用本地数据", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Recommendation data loading failed, use local data", Toast.LENGTH_SHORT).show();
             }
         });
     }

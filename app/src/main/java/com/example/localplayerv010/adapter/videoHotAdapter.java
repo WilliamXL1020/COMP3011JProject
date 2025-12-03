@@ -42,8 +42,8 @@ public class videoHotAdapter extends RecyclerView.Adapter<videoHotAdapter.ViewHo
     }
 
     public void setVideoList(List<VideoItem> newVideoList) {
-        this.videoList = newVideoList;  // 替换整个列表
-        notifyDataSetChanged();         // 通知UI更新
+        this.videoList = newVideoList;  // Replace the entire list
+        notifyDataSetChanged();         // Notification UI Update
     }
 
     @NonNull
@@ -59,14 +59,14 @@ public class videoHotAdapter extends RecyclerView.Adapter<videoHotAdapter.ViewHo
         VideoItem video = videoList.get(position);
         String thumbnailUrl = video.getThumbnailUrl();
 
-        Log.d("ImageDebug", "绑定位置: " + position + ", URL: " + thumbnailUrl);
+        Log.d("ImageDebug", "Binding location: " + position + ", URL: " + thumbnailUrl);
 
         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(thumbnailUrl)
                     .placeholder(R.drawable.default_avatar)
                     .error(R.drawable.default_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)  // 🎯 Glide 会自动处理重复加载
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)  // 🎯 Glide automatically handles duplicate loading.
                     .dontAnimate()
                     .into(holder.ivCover);
         } else {

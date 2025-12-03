@@ -21,27 +21,27 @@ public class DatabaseInitializer extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // 这个方法通常不会被调用，因为数据库已经存在
+        // This method is usually not called because the database already exists.
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // 数据库升级逻辑
+        // Database upgrade logic
     }
 
     public static void initializeTables(AppDatabase database) {
-        // 在后台线程执行
+        // Execute in a background thread
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 SupportSQLiteDatabase db = database.getOpenHelper().getWritableDatabase();
 
-                // 检查users表是否存在
+                // Check if the users table exists
                 Cursor cursor = db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
                 boolean usersTableExists = cursor.getCount() > 0;
                 cursor.close();
 
                 if (!usersTableExists) {
-                    // 手动创建users表
+                    // Manually create the users table
                     db.execSQL("CREATE TABLE IF NOT EXISTS `users` (" +
                             "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                             "`username` TEXT, " +
@@ -50,16 +50,16 @@ public class DatabaseInitializer extends SQLiteOpenHelper {
                             "`avatarUrl` TEXT, " +
                             "`createTime` INTEGER NOT NULL, " +
                             "`lastLoginTime` INTEGER NOT NULL)");
-                    Log.d("Database", "✅ Users表创建成功");
+                    Log.d("Database", "✅ The Users table was created successfully.");
                 }
 
-                // 检查browse_history表
+                // Check the browse_history table
                 cursor = db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='browse_history'");
                 boolean historyTableExists = cursor.getCount() > 0;
                 cursor.close();
 
                 if (!historyTableExists) {
-                    // 手动创建browse_history表
+                    // Manually create the browse_history table
                     db.execSQL("CREATE TABLE IF NOT EXISTS `browse_history` (" +
                             "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                             "`userId` INTEGER NOT NULL, " +
@@ -69,11 +69,11 @@ public class DatabaseInitializer extends SQLiteOpenHelper {
                             "`watchDuration` INTEGER NOT NULL, " +
                             "`watchTime` INTEGER, " +
                             "`lastPosition` INTEGER NOT NULL)");
-                    Log.d("Database", "✅ BrowseHistory表创建成功");
+                    Log.d("Database", "✅ The BrowseHistory table was created successfully");
                 }
 
             } catch (Exception e) {
-                Log.e("Database", "❌ 初始化表失败: " + e.getMessage());
+                Log.e("Database", "❌ Table initialization failed: " + e.getMessage());
             }
         });
     }

@@ -33,7 +33,7 @@ public class bannerAdapter extends RecyclerView.Adapter<bannerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         VideoItem video = videoList.get(position);
-        // 只需要设置图片，不需要设置点击事件
+        // Only the image needs to be set; click events are not required.
         if (video.getThumbnailUrl() != null && !video.getThumbnailUrl().isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(video.getThumbnailUrl())

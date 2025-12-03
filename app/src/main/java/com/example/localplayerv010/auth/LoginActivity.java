@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String usernameOrEmail, String password) {
         btnLogin.setEnabled(false);
-        btnLogin.setText("登录中...");
+        btnLogin.setText("logging...");
 
         userService.login(usernameOrEmail, password, new UserService.LoginCallback() {
             @Override
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     // 保存登录状态
                     UserPrefs.saveUserInfo(LoginActivity.this, user.getId(), user.getUsername(), user.getEmail());
-                    Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "successfully logged in！", Toast.LENGTH_SHORT).show();
                     navigateToHome();
                 });
             }
@@ -84,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 runOnUiThread(() -> {
                     btnLogin.setEnabled(true);
-                    btnLogin.setText("登录");
-                    Toast.makeText(LoginActivity.this, "登录失败: " + errorMessage, Toast.LENGTH_LONG).show();
+                    btnLogin.setText("login");
+                    Toast.makeText(LoginActivity.this, "login failed: " + errorMessage, Toast.LENGTH_LONG).show();
                 });
             }
         });

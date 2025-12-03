@@ -114,14 +114,14 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
     private String formatDuration(long duration) {
         long seconds = duration / 1000;
         if (seconds < 60) {
-            return seconds + "秒";
+            return seconds + "sec";
         } else {
             long minutes = seconds / 60;
             if (minutes < 60) {
-                return minutes + "分钟";
+                return minutes + "min";
             } else {
                 long hours = minutes / 60;
-                return hours + "小时" + (minutes % 60) + "分钟";
+                return hours + "hur" + (minutes % 60) + "min";
             }
         }
     }

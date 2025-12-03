@@ -57,7 +57,7 @@ public class BrowseHistoryFragment extends Fragment {
         tvTotalWatched = view.findViewById(R.id.tv_total_watched);
         tvClearHistory = view.findViewById(R.id.tv_clear_history);
 
-        Log.d(TAG, "视图初始化完成");
+        Log.d(TAG, "View initialization complete");
     }
 
     private void setupRecyclerView() {
@@ -65,20 +65,20 @@ public class BrowseHistoryFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new BrowseHistoryAdapter();
 
-            // 设置item点击事件 - 从头播放
+            // Setting item click events - Play from the beginning
             adapter.setOnItemClickListener((position, history) -> {
-                Log.d(TAG, "点击视频: " + history.getVideoTitle());
-                playVideoFromHistory(history, 0); // 从头开始播放
+                Log.d(TAG, "Click the video: " + history.getVideoTitle());
+                playVideoFromHistory(history, 0); // Play from the beginning
             });
 
-            // 设置续看点击事件 - 从上次位置播放
+            // Set up a resume click event - play from last position
             adapter.setOnContinueWatchClickListener((position, history) -> {
-                Log.d(TAG, "续看视频: " + history.getVideoTitle() + ", 位置: " + history.getLastPosition());
+                Log.d(TAG, "Continue watching the video: " + history.getVideoTitle() + ", Location: " + history.getLastPosition());
                 playVideoFromHistory(history, history.getLastPosition());
             });
 
             recyclerView.setAdapter(adapter);
-            Log.d(TAG, "RecyclerView设置完成");
+            Log.d(TAG, "RecyclerView setup complete.");
         }
     }
 
@@ -90,41 +90,41 @@ public class BrowseHistoryFragment extends Fragment {
 
     private void loadHistoryAndStats() {
         if (!UserPrefs.isLoggedIn(requireContext())) {
-            showEmptyState("请先登录查看浏览记录");
+            showEmptyState("Please log in first to view your browsing history.");
             updateTotalWatched(0);
             return;
         }
 
-        Log.d(TAG, "开始加载浏览记录...");
+        Log.d(TAG, "Loading browsing history...");
 
-        // 先加载浏览记录
+        // Load browsing history first
         historyService.getBrowseHistory(new BrowseHistoryService.HistoryCallback() {
             @Override
             public void onSuccess(List<BrowseHistory> history) {
-                Log.d(TAG, "成功获取浏览记录: " + history.size() + "条");
+                Log.d(TAG, "Browsing history successfully retrieved:" + history.size() );
 
                 requireActivity().runOnUiThread(() -> {
-                    // 立即更新总观看数
+                    // Update total views immediately
                     updateTotalWatched(history.size());
 
                     if (history.isEmpty()) {
-                        showEmptyState("暂无浏览记录");
+                        showEmptyState("No browsing history");
                     } else {
                         hideEmptyState();
-                        // 更新RecyclerView
+                        // Update RecyclerView
                         updateHistoryList(history);
                     }
 
-                    // 然后加载分类统计
+                    // Then load the category statistics.
                     loadCategoryStats(history.size());
                 });
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "获取浏览记录失败: " + errorMessage);
+                Log.e(TAG, "Failed to retrieve browsing history: " + errorMessage);
                 requireActivity().runOnUiThread(() -> {
-                    showEmptyState("加载失败: " + errorMessage);
+                    showEmptyState("Loading failed: " + errorMessage);
                     updateTotalWatched(0);
                 });
             }
@@ -135,7 +135,7 @@ public class BrowseHistoryFragment extends Fragment {
         historyService.getCategoryStats(new BrowseHistoryService.StatsCallback() {
             @Override
             public void onSuccess(List<BrowseHistoryDao.CategoryCount> stats) {
-                Log.d(TAG, "成功获取分类统计: " + (stats != null ? stats.size() : 0) + "个分类");
+                Log.d(TAG, "Category statistics successfully retrieved:" + (stats != null ? stats.size() : 0) + " categories");
                 requireActivity().runOnUiThread(() -> {
                     updateStatsDisplay(stats, totalRecords);
                 });
@@ -143,46 +143,46 @@ public class BrowseHistoryFragment extends Fragment {
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "获取分类统计失败: " + errorMessage);
+                Log.e(TAG, "Failed to retrieve category statistics:" + errorMessage);
                 requireActivity().runOnUiThread(() -> {
-                    tvStats.setText("统计加载失败\n\n总观看记录: " + totalRecords + "次");
+                    tvStats.setText("total views: " + totalRecords + " times");
                 });
             }
         });
     }
 
     private void updateHistoryList(List<BrowseHistory> history) {
-        Log.d(TAG, "更新历史列表，记录数: " + history.size());
+        Log.d(TAG, "Update the history list, number of records: " + history.size());
 
         if (adapter != null) {
             adapter.setHistoryList(history);
-            Log.d(TAG, "适配器数据已更新");
+            Log.d(TAG, "Adapter data has been updated");
         }
     }
 
     private void updateStatsDisplay(List<BrowseHistoryDao.CategoryCount> stats, final int totalRecords) {
         if (stats == null || stats.isEmpty()) {
-            tvStats.setText("暂无观看统计\n\n总观看记录: " + totalRecords + "次");
+            tvStats.setText("No viewing statistics available\n\nTotal Viewing History: " + totalRecords + "times");
             return;
         }
 
-        StringBuilder statsText = new StringBuilder("观看统计:\n");
+        StringBuilder statsText = new StringBuilder("Viewing statistics:\n");
         final int[] totalVideos = {0};
 
         for (BrowseHistoryDao.CategoryCount stat : stats) {
-            statsText.append("• ").append(stat.category).append(": ").append(stat.count).append("个\n");
+            statsText.append("• ").append(stat.category).append(": ").append(stat.count).append(".\n");
             totalVideos[0] += stat.count;
         }
 
-        statsText.append("\n观看视频: ").append(totalVideos[0]).append("个");
-        statsText.append("\n观看记录: ").append(totalRecords).append("次");
+        statsText.append("\nWatch video: ").append(totalVideos[0]).append("");
+        statsText.append("\nView history: ").append(totalRecords).append("times");
         tvStats.setText(statsText.toString());
     }
 
     private void playVideoFromHistory(BrowseHistory history, long startPosition) {
-        Log.d(TAG, "准备播放视频: " + history.getVideoTitle() + ", 起始位置: " + startPosition);
+        Log.d(TAG, "Preparing to play video: " + history.getVideoTitle() + ", starting position: " + startPosition);
 
-        // 先尝试从API搜索视频
+        // First try searching for videos using the API
         VideoAPIService.searchVideos(history.getVideoTitle(), 1, 1, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
@@ -191,22 +191,22 @@ public class BrowseHistoryFragment extends Fragment {
                     video.setLastPlayPosition(startPosition);
                     navigateToPlayer(video);
                 } else {
-                    // 如果API搜索失败，使用Mock数据
+                    // If the API search fails, use Mock data
                     useMockVideoData(history, startPosition);
                 }
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "搜索视频失败: " + errorMessage);
-                // 使用Mock数据作为备选
+                Log.e(TAG, "Video search failed: " + errorMessage);
+                // Use Mock data as an alternative
                 useMockVideoData(history, startPosition);
             }
         });
     }
 
     private void useMockVideoData(BrowseHistory history, long startPosition) {
-        // 从Mock数据中查找匹配的视频
+        // Find matching videos from the Mock data
         List<VideoItem> allVideos = MockVideoService.getHomeVideo();
         VideoItem foundVideo = null;
 
@@ -222,7 +222,7 @@ public class BrowseHistoryFragment extends Fragment {
             foundVideo.setLastPlayPosition(startPosition);
             navigateToPlayer(foundVideo);
         } else {
-            // 如果都没找到，创建临时视频数据
+            // If none of them are found, create temporary video data.
             createTempVideoItem(history, startPosition);
         }
     }
@@ -232,10 +232,10 @@ public class BrowseHistoryFragment extends Fragment {
         video.setVideoId(history.getVideoId());
         video.setTitle(history.getVideoTitle());
         video.setCategory(history.getCategory());
-        video.setDescription("来自浏览记录的视频");
+        video.setDescription("Videos from browsing history");
         video.setLastPlayPosition(startPosition);
 
-        // 设置一个默认的视频路径
+        // Set a default video path
         video.setVideoPath("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4");
 
         navigateToPlayer(video);
@@ -246,15 +246,15 @@ public class BrowseHistoryFragment extends Fragment {
             Intent intent = new Intent(getActivity(), PlayerActivity.class);
             intent.putExtra("video_data", video);
             startActivity(intent);
-            Log.d(TAG, "成功跳转到播放页面");
+            Log.d(TAG, "Successfully redirected to the playback page");
         } catch (Exception e) {
-            Log.e(TAG, "跳转到播放页面失败: " + e.getMessage());
-            Toast.makeText(getContext(), "打开视频失败", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Redirecting to the playback page failed: " + e.getMessage());
+            Toast.makeText(getContext(), "Video failed to open", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void updateTotalWatched(int count) {
-        Log.d(TAG, "更新总观看数为: " + count);
+        Log.d(TAG, "The total number of views has been updated: " + count);
 
         if (tvTotalWatched != null) {
             tvTotalWatched.setText(String.valueOf(count));
@@ -282,21 +282,21 @@ public class BrowseHistoryFragment extends Fragment {
 
     private void clearHistory() {
         if (!UserPrefs.isLoggedIn(requireContext())) {
-            Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "please login first", Toast.LENGTH_SHORT).show();
             return;
         }
 
         historyService.clearHistory(new BrowseHistoryService.ClearCallback() {
             @Override
             public void onSuccess(int deletedCount) {
-                Toast.makeText(getContext(), "已清空 " + deletedCount + " 条记录", Toast.LENGTH_SHORT).show();
-                // 清空后重新加载
+                Toast.makeText(getContext(), "cleared " + deletedCount + " records", Toast.LENGTH_SHORT).show();
+                // Reload after clearing
                 loadHistoryAndStats();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Toast.makeText(getContext(), "清空失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed to clean: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }

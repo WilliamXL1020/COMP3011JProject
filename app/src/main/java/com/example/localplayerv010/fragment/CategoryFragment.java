@@ -52,9 +52,9 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 获取分区名称
+        // Get partition name
         if (getArguments() != null) {
-            categoryName = getArguments().getString("category_name", "未知分区");
+            categoryName = getArguments().getString("category_name", "Unknown partition");
         }
     }
 
@@ -77,11 +77,11 @@ public class CategoryFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        // 单列布局
+        // Single column layout
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        // 使用新的横向布局适配器
+        // Use the new landscape layout adapter
         adapter = new videoHotAdapter(categoryVideos);
         recyclerView.setAdapter(adapter);
 
@@ -115,34 +115,34 @@ public class CategoryFragment extends Fragment {
     private List<VideoItem> filterVideosByCategory(List<VideoItem> allVideos, String category) {
         List<VideoItem> result = new ArrayList<>();
 
-        // 就做最简单的筛选，其他逻辑都去掉
+        // Just do the simplest filtering and remove all other logic
         for (VideoItem video : allVideos) {
             if (category.equals(video.getCategory())) {
                 result.add(video);
             }
         }
 
-        // 现在不做任何特殊处理，等明确需求后再添加
+        // No special processing will be done now; we'll add more once the requirements are clarified
         return result;
     }
 
 
     private String getSearchQueryByCategory(String category) {
         switch (category) {
-            case "游戏":
+            case "gaming":
                 return "gaming";
-            case "音乐":
+            case "music":
                 return "music";
-            case "影视":
+            case "movie":
                 return "movie";
-            case "知识":
+            case "education":
                 return "education";
-            case "生活":
+            case "lifestyle":
                 return "lifestyle";
-            case "搞笑":
+            case "funny":
                 return "funny";
             default:
-                return category.toLowerCase(); // 默认使用分类名称的小写
+                return category.toLowerCase(); // The category name is used in lowercase by default
         }
     }
 

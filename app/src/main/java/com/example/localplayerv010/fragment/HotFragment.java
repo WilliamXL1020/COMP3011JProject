@@ -30,7 +30,7 @@ import java.util.List;
 public class HotFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefresh;
-    private videoHotAdapter adapter; // 使用新的适配器
+    private videoHotAdapter adapter; // Use the new adapter
     private List<VideoItem> hotVideos = new ArrayList<>();
 
     @Override
@@ -46,16 +46,16 @@ public class HotFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         swipeRefresh = view.findViewById(R.id.swipe_refresh);
 
-        // 一行代码，传入刷新时要执行的逻辑
+        // A single line of code, passing in the logic to be executed upon refresh
         RefreshUtils.setupRefresh(swipeRefresh, this::refreshHotData);
     }
 
     private void setupRecyclerView() {
-        // 单列布局
+        // Single column layout
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        // 使用新的横向布局适配器
+        // Use the new landscape layout adapter
         adapter = new videoHotAdapter(hotVideos);
         recyclerView.setAdapter(adapter);
 
@@ -73,19 +73,19 @@ public class HotFragment extends Fragment {
         VideoAPIService.getPopularVideos(new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
-                hotVideos = videos; // 直接使用API返回的热门视频，不需要额外处理
+                hotVideos = videos; // The popular videos returned by the API can be used directly without any additional processing
                 adapter.setVideoList(hotVideos);
-                Log.d("HotFragment", "成功加载 " + hotVideos.size() + " 个热门视频");
+                Log.d("HotFragment", "successfully loaded " + hotVideos.size() + " popular videos");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                // 网络失败，使用备用数据
+                // Network failure, using backup data
                 List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
                 adapter.setVideoList(fallbackVideos);
 
-                Toast.makeText(getContext(), "热门数据加载失败，使用本地数据", Toast.LENGTH_SHORT).show();
-                Log.e("HotFragment", "加载失败: " + errorMessage);
+                Toast.makeText(getContext(), "Popular data failed to load; local data is used instead", Toast.LENGTH_SHORT).show();
+                Log.e("HotFragment", "load failure: " + errorMessage);
             }
         });
     }
@@ -97,7 +97,7 @@ public class HotFragment extends Fragment {
                 hotVideos = videos;
                 adapter.setVideoList(hotVideos);
                 RefreshUtils.stopRefresh(swipeRefresh);
-                Toast.makeText(getContext(), "热门视频已更新", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Popular videos have been updated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -105,24 +105,24 @@ public class HotFragment extends Fragment {
                 List<VideoItem> fallbackVideos = MockVideoService.getHomeVideo();
                 adapter.setVideoList(fallbackVideos);
                 RefreshUtils.stopRefresh(swipeRefresh);
-                Toast.makeText(getContext(), "更新失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Update failed: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private List<VideoItem> processHotData(List<VideoItem> allVideos) {
         List<VideoItem> result = new ArrayList<>();
-        Log.d("VideoProcess", "原始数据: " + allVideos.size() + "个视频");
+        Log.d("VideoProcess", "Raw data: " + allVideos.size() + "videos");
 
 
 
-        // 1. 限制数量（比如20个）
+        // Limited to 20
         int maxCount = Math.min(allVideos.size(), 20);
         for (int i = 0; i < maxCount; i++) {
             result.add(allVideos.get(i));
         }
 
-        Log.d("VideoProcess", "最终返回: " + result.size() + "个视频");
+        Log.d("VideoProcess", "finally returned: " + result.size() + "videos");
         return result;
     }
 }

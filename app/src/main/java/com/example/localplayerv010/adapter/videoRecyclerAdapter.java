@@ -36,8 +36,8 @@ public class videoRecyclerAdapter extends RecyclerView.Adapter<videoRecyclerAdap
     }
 
     public void setVideoList(List<VideoItem> newVideoList) {
-        this.videoList = newVideoList;  // 替换整个列表
-        notifyDataSetChanged();         // 通知UI更新
+        this.videoList = newVideoList;  // Replace the entire list
+        notifyDataSetChanged();         // Notification UI Update
     }
 
     @NonNull

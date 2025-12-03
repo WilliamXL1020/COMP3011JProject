@@ -57,23 +57,23 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateInputs(String username, String email, String password, String confirmPassword) {
         if (username.isEmpty()) {
-            etUsername.setError("请输入用户名");
+            etUsername.setError("Please enter your username");
             return false;
         }
         if (email.isEmpty()) {
-            etEmail.setError("请输入邮箱");
+            etEmail.setError("Please enter your email address");
             return false;
         }
         if (password.isEmpty()) {
-            etPassword.setError("请输入密码");
+            etPassword.setError("Please enter your password");
             return false;
         }
         if (password.length() < 6) {
-            etPassword.setError("密码至少6位");
+            etPassword.setError("Password must be at least 6 characters long");
             return false;
         }
         if (!password.equals(confirmPassword)) {
-            etConfirmPassword.setError("密码不一致");
+            etConfirmPassword.setError("Password mismatch");
             return false;
         }
         return true;
