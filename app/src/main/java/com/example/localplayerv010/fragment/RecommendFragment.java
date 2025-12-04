@@ -122,44 +122,44 @@ public class RecommendFragment extends Fragment {
     }
 
     private void refreshRecommendData() {
-        // 生成随机页码（1-10页之间）
+        // Generate random page numbers (between pages 1 and 10)
         int randomPage = generateRandomPage();
 
         VideoAPIService.getHomeVideo(randomPage, VIDEOS_PER_PAGE, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
-                // 保存数据到allVideos
+                // Save data to allVideos
                 allVideos = videos;
 
                 List<VideoItem> newVideos = processVideoData(videos);
                 adapter.setVideoList(newVideos);
                 currentPage = randomPage;
 
-                // 调用setupBanner
+                // Call setupBanner
                 setupBanner();
 
                 RefreshUtils.stopRefresh(swipeRefresh);
-                Toast.makeText(getContext(), "推荐已更新！第" + randomPage + "页", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Recommend has updated！page " + randomPage , Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                // 保存Mock数据到allVideos
+                // Save Mock data to allVideos
                 allVideos = MockVideoService.getHomeVideo();
 
                 List<VideoItem> newVideos = processVideoData(allVideos);
                 adapter.setVideoList(newVideos);
 
-                // 调用setupBanner
+                // Call setupBanner
                 setupBanner();
 
                 RefreshUtils.stopRefresh(swipeRefresh);
-                Toast.makeText(getContext(), "更新失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed to update: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // 生成随机页码（1-10页）
+    // Generate random page numbers (pages 1-10)
     private int generateRandomPage() {
         return (int) (Math.random() * 10) + 1;
     }

@@ -54,16 +54,16 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BrowseHistory history = historyList.get(position);
 
-        // 设置数据
+        // set data
         holder.tvVideoTitle.setText(history.getVideoTitle());
         holder.tvCategory.setText(history.getCategory());
         holder.tvWatchTime.setText(formatWatchTime(history.getWatchTime()));
-        holder.tvWatchDuration.setText("观看" + formatDuration(history.getWatchDuration()));
+        holder.tvWatchDuration.setText("view" + formatDuration(history.getWatchDuration()));
 
-        // 设置续看按钮
+        // set resume data
         if (history.getLastPosition() > 0) {
             holder.tvLastPosition.setVisibility(View.VISIBLE);
-            holder.tvLastPosition.setText("续看");
+            holder.tvLastPosition.setText("resume");
             holder.tvLastPosition.setOnClickListener(v -> {
                 if (onContinueWatchClickListener != null) {
                     onContinueWatchClickListener.onContinueWatchClick(position, history);
@@ -73,16 +73,16 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
             holder.tvLastPosition.setVisibility(View.GONE);
         }
 
-        // 设置整个item点击事件
+        // Set the click event for the entire item
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(position, history);
             }
         });
 
-        // 删除按钮（暂时不实现功能）
+        // Delete button (not yet implemented)
         holder.btnDelete.setOnClickListener(v -> {
-            // 待实现删除功能
+            // Deletion function to be implemented
         });
     }
 

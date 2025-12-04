@@ -21,7 +21,7 @@ public class VideoAPIService {
 
 
     public static void getHomeVideo(int page, int perPage, VideoLoadCallback callback) {
-        // 改为使用热门视频接口，而不是空字符串搜索
+        // Instead of searching with empty strings, use the popular video API
         RetrofitClient.getPexelsApiService().getPopularVideos(page, perPage)
                 .enqueue(new Callback<VideoListResponse>() {
                     @Override
@@ -30,29 +30,29 @@ public class VideoAPIService {
                             List<PexelsVideo> pexelsVideos = response.body().getVideos();
                             List<VideoItem> videoItems = VideoConverter.fromPexelsVideos(pexelsVideos);
                             callback.onSuccess(videoItems);
-                            Log.d("VideoAPIService", "成功获取第" + page + "页，" + videoItems.size() + "个视频");
+                            Log.d("VideoAPIService", "Successfully obtained page " + page + ", " + videoItems.size() + " videos");
                         } else {
-                            Log.e("VideoAPIService", "API响应失败，状态码: " + response.code());
-                            callback.onFailure("API响应失败: " + response.code());
+                            Log.e("VideoAPIService", "API response failed, status code: " + response.code());
+                            callback.onFailure("API response failed: " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<VideoListResponse> call, Throwable t) {
-                        Log.e("VideoAPIService", "网络请求失败: " + t.getMessage());
-                        callback.onFailure("网络请求失败: " + t.getMessage());
+                        Log.e("VideoAPIService", "Network request failed: " + t.getMessage());
+                        callback.onFailure("Network request failed: " + t.getMessage());
                     }
                 });
     }
 
     public static void getHomeVideo(VideoLoadCallback callback) {
-        getHomeVideo(1, 20, callback); // 默认第一页
+        getHomeVideo(1, 20, callback); // set page 1 as default
     }
 
 
 
     public static void getPopularVideos(VideoLoadCallback callback) {
-        RetrofitClient.getPexelsApiService().getPopularVideos(1, 20) // 第一页，每页20个
+        RetrofitClient.getPexelsApiService().getPopularVideos(1, 20) // Page 1, 20 per page
                 .enqueue(new Callback<VideoListResponse>() {
                     @Override
                     public void onResponse(Call<VideoListResponse> call, Response<VideoListResponse> response) {
@@ -61,13 +61,13 @@ public class VideoAPIService {
                             List<VideoItem> videoItems = VideoConverter.fromPexelsVideos(pexelsVideos);
                             callback.onSuccess(videoItems);
                         } else {
-                            callback.onFailure("API响应失败: " + response.code());
+                            callback.onFailure("API response failed: " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<VideoListResponse> call, Throwable t) {
-                        callback.onFailure("网络请求失败: " + t.getMessage());
+                        callback.onFailure("Network request failed: " + t.getMessage());
                     }
                 });
     }
@@ -83,13 +83,13 @@ public class VideoAPIService {
 
                 }
                 else {
-                    callback.onFailure("API响应失败: " + response.code());
+                    callback.onFailure("API response failed: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<VideoListResponse> call, Throwable t) {
-                callback.onFailure("网络请求失败: " + t.getMessage());
+                callback.onFailure("Network request failed: " + t.getMessage());
             }
         });
     }

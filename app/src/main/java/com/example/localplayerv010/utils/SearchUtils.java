@@ -20,25 +20,25 @@ public class SearchUtils {
 
         // 查找搜索框
         EditText etSearch = activity.findViewById(R.id.et_search);
-        Log.d("SearchDebug", "搜索框找到: " + (etSearch != null));
+        Log.d("SearchDebug", "Find the search box: " + (etSearch != null));
         if (etSearch != null) {
             setupEnterSearch(etSearch, activity);
         } else {
-            Log.w("SearchUtils", "未找到搜索框: et_search");
+            Log.w("SearchUtils", "Search box not found: et_search");
         }
     }
 
     public static void setupEnterSearch(EditText etSearch, Activity activity) {
         if (etSearch == null || activity == null) return;
 
-        Log.d("SearchDebug", "设置回车监听器");
+        Log.d("SearchDebug", "Set up a carriage return listener");
 
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
-            Log.d("SearchDebug", "编辑器动作: " + actionId);
+            Log.d("SearchDebug", "Editor Actions: " + actionId);
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH ||
                     actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                Log.d("SearchDebug", "触发搜索");
+                Log.d("SearchDebug", "Trigger search");
                 performSearch(etSearch, activity);
                 return true;
             }
@@ -50,19 +50,19 @@ public class SearchUtils {
     private static void performSearch(EditText etSearch, Activity activity) {
         String query = etSearch.getText().toString().trim();
         if (!query.isEmpty()) {
-            // 隐藏键盘
+            // hide keyboard
             KeyboardUtils.hideKeyboard(activity);
 
             VideoAPIService.searchVideos(query, 1, 20, new VideoAPIService.VideoLoadCallback() {
                 @Override
                 public void onSuccess(List<VideoItem> videos) {
                     activity.runOnUiThread(()->{
-                        // 跳转到搜索结果页面
+                        // Redirect to search results page
                         Intent intent = new Intent(activity, SearchActivity.class);
                         intent.putExtra("search_query", query);
                         activity.startActivity(intent);
 
-                        // 清空搜索框
+                        // Clear the search box
                         etSearch.setText("");
                     });
                 }
@@ -71,7 +71,7 @@ public class SearchUtils {
                 public void onFailure(String errorMessage) {
                     activity.runOnUiThread(() -> {
 
-                        // 降级方案：跳转页面但使用本地数据
+                        // Degradation solution: Redirect to a different page but use local data
                         Intent intent = new Intent(activity, SearchActivity.class);
                         intent.putExtra("search_query", query);
                         intent.putExtra("search_failed", true);
@@ -79,12 +79,12 @@ public class SearchUtils {
 
                         etSearch.setText("");
 
-                        Toast.makeText(activity, "搜索失败，使用本地数据", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Search failed, using local data", Toast.LENGTH_SHORT).show();
                     });
                 }
             });
         } else {
-            Toast.makeText(activity, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Please enter your search query", Toast.LENGTH_SHORT).show();
         }
     }
 

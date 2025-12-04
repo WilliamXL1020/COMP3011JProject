@@ -20,9 +20,9 @@ public class BrowseHistory {
     private String videoId;
     private String videoTitle;
     private String category;
-    private long watchDuration; // 观看时长（毫秒）
-    private Date watchTime;     // 观看时间
-    private long lastPosition;  // 最后观看位置
+    private long watchDuration; // Viewing time
+    private Date watchTime;     // watch time
+    private long lastPosition;  // last view position
 
 
     public BrowseHistory(int userId, String videoId, String videoTitle, String category) {
@@ -35,7 +35,7 @@ public class BrowseHistory {
         this.lastPosition = 0;
     }
 
-    // Getter 和 Setter 方法
+    // Getter and Setter method
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

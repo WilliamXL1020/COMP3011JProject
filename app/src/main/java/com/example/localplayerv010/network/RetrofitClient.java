@@ -35,13 +35,13 @@ public class RetrofitClient {
         if (retrofit == null) {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-            // 1. 添加认证拦截器 - 自动为每个请求添加API密钥
+            // Add an authentication interceptor - automatically add an API key for each request
             httpClient.addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Interceptor.Chain chain) throws IOException {
                     Request original = chain.request();
 
-                    // 创建新请求，添加认证头
+                    // Create a new request and add authentication headers.
                     Request.Builder requestBuilder = original.newBuilder()
                             .header("Authorization", API_KEY);
 
@@ -50,19 +50,19 @@ public class RetrofitClient {
                 }
             });
 
-            // 2. 添加日志拦截器（仅在调试模式）
+            // Add a log interceptor (in debug mode only)
             if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
                 logging.setLevel(HttpLoggingInterceptor.Level.BODY);
                 httpClient.addInterceptor(logging);
             }
 
-            // 3. 设置超时时间
+            // 3. Set timeout period
             httpClient.connectTimeout(30, TimeUnit.SECONDS);
             httpClient.readTimeout(30, TimeUnit.SECONDS);
             httpClient.writeTimeout(30, TimeUnit.SECONDS);
 
-            // 4. 创建Retrofit实例
+            // 4. Create a Retrofit instance
             retrofit = new Retrofit.Builder()
                     .baseUrl(Base_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -77,7 +77,7 @@ public class RetrofitClient {
             retrofit2.Response<VideoListResponse> response = getPexelsApiService().getPopularVideos(1, 1).execute();
             return response.isSuccessful();
         } catch (IOException e) {
-            Log.e("RetrofitClient", "网络测试失败: " + e.getMessage());
+            Log.e("RetrofitClient", "Network test failed: " + e.getMessage());
             return false;
         }
     }

@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(String username, String email, String password) {
         btnRegister.setEnabled(false);
-        btnRegister.setText("注册中...");
+        btnRegister.setText("registering...");
 
         User user = new User(username, email, password);
 
@@ -89,8 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onSuccess(long userId) {
                 runOnUiThread(() -> {
-                    Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
-                    // 注册成功后跳转到登录页面
+                    Toast.makeText(RegisterActivity.this, "successfully registered！", Toast.LENGTH_SHORT).show();
+                    // After successful registration, you will be redirected to the login page
                     navigateToLogin();
                 });
             }
@@ -99,8 +99,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 runOnUiThread(() -> {
                     btnRegister.setEnabled(true);
-                    btnRegister.setText("注册");
-                    Toast.makeText(RegisterActivity.this, "注册失败: " + errorMessage, Toast.LENGTH_LONG).show();
+                    btnRegister.setText("Register");
+                    Toast.makeText(RegisterActivity.this, "failed to register: " + errorMessage, Toast.LENGTH_LONG).show();
                 });
             }
         });

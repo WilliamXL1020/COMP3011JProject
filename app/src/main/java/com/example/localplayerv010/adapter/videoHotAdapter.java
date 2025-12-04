@@ -87,7 +87,7 @@ public class videoHotAdapter extends RecyclerView.Adapter<videoHotAdapter.ViewHo
     }
     @Override
     public int getItemCount() {
-        Log.d("AdapterDebug", "getItemCount返回: " + videoList.size());
+        Log.d("AdapterDebug", "getItemCount return: " + videoList.size());
         return videoList.size();
     }
 
@@ -116,7 +116,7 @@ public class videoHotAdapter extends RecyclerView.Adapter<videoHotAdapter.ViewHo
                 Log.d("ViewHolder", "tvUploadTime: " + (tvUploadTime != null));
                 Log.d("ViewHolder", "tvCategory: " + (tvCategory != null));
             }catch (Exception e){
-                Log.e("ViewHolder", "初始化ViewHolder失败: " + e.getMessage());
+                Log.e("ViewHolder", "ViewHolder initialization failed: " + e.getMessage());
             }
         }
 

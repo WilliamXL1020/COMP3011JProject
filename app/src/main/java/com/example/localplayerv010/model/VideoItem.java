@@ -10,50 +10,48 @@ import java.util.List;
 
 public class VideoItem implements Parcelable {
 
-    // 1. 基础标识信息
-    private String VideoId;          // 视频唯一ID
-    private String Title;           // 视频标题
-    private String Description;     // 视频描述
-    private String ShortDescription;// 简短描述（用于列表显示）
+    // 1. Basic Identification Information
+    private String VideoId;          // Unique video ID
+    private String Title;           // Video title
+    private String Description;     // Video description
+    private String ShortDescription; // Short description (for list display)
 
-    // 2. 媒体文件信息
-    private String VideoPath;       // 本地文件路径 或 网络URL
-    private long Duration;          // 视频时长（毫秒）
-    private long FileSize;          // 文件大小（字节）
-    private String Format;          // 视频格式：mp4, mkv等
-    private int ResolutionWidth;    // 分辨率宽
-    private int ResolutionHeight;   // 分辨率高
+    // 2. Media File Information
+    private String VideoPath;       // Local file path or network URL
+    private long Duration;          // Video duration (milliseconds)
+    private long FileSize;          // File size (bytes)
+    private String Format;          // Video format: mp4, mkv, etc.
+    private int ResolutionWidth;    // Resolution width
+    private int ResolutionHeight;   // Resolution height
 
-    // 3. 元数据信息
-    private String Category;        // 分类：游戏、音乐、影视等
-    private List<String> Tags;      // 标签列表
-    private Date UploadTime;        // 上传时间
-    private String ThumbnailUrl;    // 缩略图网络URL
-    private String ThumbnailPath;   // 缩略图本地路径
+    // 3. Metadata Information
+    private String Category;        // Category: game, music, film, etc.
+    private List<String> Tags;      // List of tags
+    private Date UploadTime;        // Upload time
+    private String ThumbnailUrl;    // Thumbnail network URL
+    private String ThumbnailPath;   // Thumbnail local path
 
-    // 4. 统计信息
-    private int PlayCount;          // 播放次数
-    private int LikeCount;          // 点赞数
-    private int FavoriteCount;      // 收藏数
-    private int CommentCount;       // 评论数
+    // 4. Statistical Information
+    private int PlayCount;          // Play count
+    private int LikeCount;          // Like count
+    private int FavoriteCount;      // Favorite count
+    private int CommentCount;       // Comment count
 
-    // 5. 用户信息
-    private String UploaderId;      // 上传者ID
-    private String UploaderName;    // 上传者名称
-    private String UploaderAvatar;  // 上传者头像
+    // 5. User Information
+    private String UploaderId;      // Uploader ID
+    private String UploaderName;    // Uploader name
+    private String UploaderAvatar;  // Uploader avatar
 
-    // 6. 业务状态（用户相关）
-    private boolean isLiked;        // 当前用户是否点赞
-    private boolean isFavorited;    // 当前用户是否收藏
-    private long LastPlayPosition;  // 最后播放位置（毫秒）
-    private Date LastPlayTime;      // 最后播放时间
+    // 6. Business Status (User-related)
+    private boolean isLiked;        // Whether the current user has liked it
+    private boolean isFavorited;    // Whether the current user has favorited it
+    private long LastPlayPosition;  // Last playback position (milliseconds)
+    private Date LastPlayTime;      // Last playback time
 
-
-    //构造函数
+    // Constructor
     public VideoItem() {}
 
-
-    //读取视频信息
+    // Reading video information
     protected VideoItem(Parcel in) {
         VideoId = in.readString();
         Title = in.readString();
@@ -81,8 +79,6 @@ public class VideoItem implements Parcelable {
         isFavorited = in.readByte() != 0;
         LastPlayPosition = in.readLong();
         LastPlayTime = new Date(in.readLong());
-
-
     }
 
     @Override
@@ -132,14 +128,13 @@ public class VideoItem implements Parcelable {
         }
     };
 
-    //所有getter方法以及setter方法，针对封装后的数据做返回
+    // All getter and setter methods, returning encapsulated data
     public String getVideoId() {
         return VideoId;
     }
     public void setVideoId(String videoId) {
         VideoId = videoId;
     }
-
 
     public String getTitle() {
         return Title;
@@ -148,11 +143,9 @@ public class VideoItem implements Parcelable {
         Title = title;
     }
 
-
     public String getVideoPath() {
         return VideoPath;
     }
-
 
     public String getDescription() {
         return Description;
@@ -160,7 +153,6 @@ public class VideoItem implements Parcelable {
     public void setDescription(String description) {
         Description = description;
     }
-
 
     public long getDuration() {
         return Duration;
@@ -177,14 +169,12 @@ public class VideoItem implements Parcelable {
         return UploadTime;
     }
 
-
     public int getPlayCount() {
         return PlayCount;
     }
     public void setPlayCount(int playCount) {
         PlayCount = playCount;
     }
-
 
     public int getLikeCount() {
         return LikeCount;
@@ -197,14 +187,12 @@ public class VideoItem implements Parcelable {
         isLiked = liked;
     }
 
-
     public boolean isFavorited() {
         return isFavorited;
     }
     public void setFavorited(boolean favorited) {
         isFavorited = favorited;
     }
-
 
     public long getLastPlayPosition() {
         return LastPlayPosition;
@@ -216,7 +204,7 @@ public class VideoItem implements Parcelable {
     public String getCategory() {
         return Category;
     }
-    //测试用setter，无实际意义
+// Setter for testing purposes, no practical meaning
 
     public String getUploaderName() {
         return UploaderName;
@@ -277,7 +265,7 @@ public class VideoItem implements Parcelable {
         ThumbnailPath = thumbnailPath;
     }
 
-    //利用工具类获得格式化好的信息
+    // Using utility class to obtain formatted information
     public String getFormatDuration(){
         return VideoUtils.formatDuration(Duration);
     }

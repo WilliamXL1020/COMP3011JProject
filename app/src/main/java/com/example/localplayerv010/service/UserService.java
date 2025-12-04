@@ -28,18 +28,18 @@ public class UserService {
             try {
                 if (userDao.checkUsernameExists(user.getUsername())>0){
                     new Handler(Looper.getMainLooper()).post(() ->
-                            callback.onFailure("用户名已存在"));
+                            callback.onFailure("Username already exists"));
                     return;
                 }
 
                 if (userDao.checkEmailExists(user.getEmail())>0){
                     new Handler(Looper.getMainLooper()).post(() ->
-                            callback.onFailure("邮箱已存在"));
+                            callback.onFailure("The email address already exists"));
                     return;
                 }
 
                 long userId = userDao.insertUser(user);
-                Log.d("UserService", "✅ 用户注册成功, ID: " + userId);
+                Log.d("UserService", "✅ User registration successful, ID: " + userId);
 
                 new Handler(Looper.getMainLooper()).post(() ->
                         callback.onSuccess(userId));
@@ -47,9 +47,9 @@ public class UserService {
 
 
             }catch (Exception e) {
-                Log.e("UserService", "❌ 注册失败: " + e.getMessage());
+                Log.e("UserService", "❌ Registration failed: " + e.getMessage());
                 new Handler(Looper.getMainLooper()).post(() ->
-                        callback.onFailure("注册失败: " + e.getMessage()));
+                        callback.onFailure("failed to register: " + e.getMessage()));
             }
         });
     }
@@ -58,25 +58,25 @@ public class UserService {
     public void login(String usernameOrEmail, String password, LoginCallback callback) {
         executor.execute(() -> {
             try {
-                Log.d("UserService", "开始登录: " + usernameOrEmail);
+                Log.d("UserService", "Start logging: " + usernameOrEmail);
 
                 User user = userDao.login(usernameOrEmail, password);
                 if (user != null) {
                     // 更新登录时间
                     userDao.updateLoginTime(user.getId(), System.currentTimeMillis());
-                    Log.d("UserService", "✅ 登录成功, 用户ID: " + user.getId());
+                    Log.d("UserService", "✅ Login successful, User ID: " + user.getId());
 
                     new Handler(Looper.getMainLooper()).post(() ->
                             callback.onSuccess(user));
                 } else {
-                    Log.d("UserService", "❌ 登录失败: 用户名或密码错误");
+                    Log.d("UserService", "❌ Login failed: Incorrect username or password");
                     new Handler(Looper.getMainLooper()).post(() ->
-                            callback.onFailure("用户名或密码错误"));
+                            callback.onFailure("Username or password incorrect"));
                 }
             } catch (Exception e) {
-                Log.e("UserService", "❌ 登录异常: " + e.getMessage());
+                Log.e("UserService", "❌ Login error: " + e.getMessage());
                 new Handler(Looper.getMainLooper()).post(() ->
-                        callback.onFailure("登录失败: " + e.getMessage()));
+                        callback.onFailure("Login failed: " + e.getMessage()));
             }
         });
     }

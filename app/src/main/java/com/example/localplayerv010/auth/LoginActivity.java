@@ -55,11 +55,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateInputs(String usernameOrEmail, String password) {
         if (usernameOrEmail.isEmpty()) {
-            etUsernameOrEmail.setError("请输入用户名或邮箱");
+            etUsernameOrEmail.setError("please enter username or email");
             return false;
         }
         if (password.isEmpty()) {
-            etPassword.setError("请输入密码");
+            etPassword.setError("please enter your password");
             return false;
         }
         return true;
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(com.example.localplayerv010.model.User user) {
                 runOnUiThread(() -> {
-                    // 保存登录状态
+                    // Save login status
                     UserPrefs.saveUserInfo(LoginActivity.this, user.getId(), user.getUsername(), user.getEmail());
                     Toast.makeText(LoginActivity.this, "successfully logged in！", Toast.LENGTH_SHORT).show();
                     navigateToHome();

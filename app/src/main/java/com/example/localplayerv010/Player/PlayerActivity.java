@@ -57,9 +57,9 @@ public class PlayerActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton btnBack;
 
-    // 双击相关变量
+    // Double-click the relevant variable
     private long lastTapTime = 0;
-    private static final long DOUBLE_TAP_DELAY = 300; // 双击间隔300毫秒
+    private static final long DOUBLE_TAP_DELAY = 300; // Double-click interval 300 milliseconds
 
 
     @Override
@@ -67,9 +67,9 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         currentVideo = getIntent().getParcelableExtra("video_data");
-        //初始化组件
+        //Initialize component
         playerView = findViewById(R.id.player_view);
-        //调用初始化完的播放器
+        //Call the initialized player
         historyService = new BrowseHistoryService(this);
         setupToolbar();
         SearchUtils.setupEnterSearch(this);
@@ -85,12 +85,12 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isFullscreen) {
-            // 全屏时，退出全屏而不是关闭Activity
+            // When in full-screen mode, exit full-screen mode instead of closing the Activity
             exitFullscreen();
-            isFullscreen = false; // 确保状态同步
+            isFullscreen = false; // Ensure state synchronization
             updateFullscreenIcon();
         } else {
-            // 非全屏时，正常返回
+            // Normal return when not in full screen
             super.onBackPressed();
         }
     }
@@ -107,10 +107,10 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d("Fullscreen", "方向变化: " + newConfig.orientation);
+        Log.d("Fullscreen", "direction changed: " + newConfig.orientation);
     }
 
-    //搜索框焦点改变，当点击其他内容时候搜索框不涉及变化
+    // When the search box focuses on another content, the search box remains unchanged
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -130,22 +130,22 @@ public class PlayerActivity extends AppCompatActivity {
 //    private void createMockVideoData() {
 //        currentVideo = new VideoItem();
 //        currentVideo.setVideoId("mock_001");
-//        currentVideo.setTitle("测试视频.mp4");
-//        currentVideo.setDescription("这是一个用于测试的视频文件，展示播放器的各项功能");
+//        currentVideo.setTitle("samplevideo.mp4");
+//        currentVideo.setDescription("This is a video file used for testing, showcasing the various functions of the player");
 //        currentVideo.setVideoPath("file:///android_asset/test.mp4");
 //
-//        // 假数据
-//        currentVideo.setDuration(125000);        // 2分5秒
+//        // fake data
+//        currentVideo.setDuration(125000);        // 2min 5sec
 //        currentVideo.setFileSize(15728640);      // 15MB
 //        currentVideo.setFormat("mp4");
 //        currentVideo.setResolutionWidth(1920);
 //        currentVideo.setResolutionHeight(1080);
 //        currentVideo.setPlayCount(1520);
 //        currentVideo.setLikeCount(45);
-//        currentVideo.setUploadTime(new Date(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000)); // 2天前
+//        currentVideo.setUploadTime(new Date(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000)); // 2 days before
 //
-//        currentVideo.setUploaderName("测试用户");
-//        currentVideo.setCategory("测试分类");
+//        currentVideo.setUploaderName("test account");
+//        currentVideo.setCategory("Test Classification");
 //    }
 
     private void setupToolbar() {
@@ -154,27 +154,27 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
 
-    //设置返回按钮
+    //Set a back button
     private void setupCustomBackButton() {
         btnBack = findViewById(R.id.btn_custom_back);
         btnBack.setOnClickListener(v -> {
             onBackPressed();
         });
 
-        // 初始隐藏（跟随控制器显示）
+        // Initially hidden (follows controller display)
         btnBack.setVisibility(View.VISIBLE);
     }
 
-    //设置全屏按钮
+    // Set full-screen button
     private void setupCustomFullscreenButton() {
         ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
         btnFullscreen.setOnClickListener(v -> toggleFullscreen());
 
-        // 根据全屏状态更新图标
+        // Update icons based on full-screen status
         updateFullscreenIcon();
     }
 
-    //执行全屏行为
+    // Perform fullscreen behavior
     private void toggleFullscreen() {
         if (isFullscreen) {
             exitFullscreen();
@@ -185,13 +185,13 @@ public class PlayerActivity extends AppCompatActivity {
         updateFullscreenIcon();
     }
 
-    //全屏执行具体方法（隐藏actionbar和其他组件）
+    // Execute the specific method in full-screen mode (hiding the action bar and other components)
     private void enterFullscreen() {
 //        if (getSupportActionBar() != null) {
 //            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            // 隐藏标题
+//            // hide topic
 //            getSupportActionBar().setDisplayShowTitleEnabled(false);
-//            // 隐藏图标
+//            // Hide icon
 //            getSupportActionBar().setDisplayShowHomeEnabled(false);
 //
 //        }
@@ -201,9 +201,9 @@ public class PlayerActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
-        //强制横屏
+        // Force landscape mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //隐藏其他组件
+        // Hide other components
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -233,36 +233,36 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void exitFullscreen() {
         toolbar.setVisibility(View.VISIBLE);
-        //强制竖屏
+        // Forced portrait mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // 显示状态栏和导航栏
+        // Display status bar and navigation bar
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 
-        // 显示ActionBar（如果有）
+        // Display ActionBar (if present)
 //        if (getSupportActionBar() != null) {
-//            // 恢复背景色（使用你的主题颜色）
+//            // Restore background color (using your theme colors)
 //            getSupportActionBar().setBackgroundDrawable(
-//                    new ColorDrawable(getResources().getColor(R.color.colorPrimary)) // 你的主题色
+//                    new ColorDrawable(getResources().getColor(R.color.colorPrimary)) // Your theme color
 //            );
-//            // 恢复标题显示
+//            // Restore title display
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
-//            // 恢复图标显示
+//            // Restore icon display
 //            getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        }
 
-        // 恢复状态栏颜色（如果需要）
+        // Restore status bar color (if needed)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            getWindow().setStatusBarColor(getResources().getColor(android.R.color.background_dark));
 //        }
 
-        //显示视频信息区域和推荐列表
+        // Display video information area and recommendation list
         findViewById(R.id.video_info_container).setVisibility(View.VISIBLE);
         findViewById(R.id.recommendations_container).setVisibility(View.VISIBLE);
 
-        // 恢复播放器原始布局权重
+        // Restore the player's original layout weight
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) playerView.getLayoutParams();
-        params.weight = 4; // 恢复原始权重
+        params.weight = 4; // Restore original weights
         params.height = 0;
         playerView.setLayoutParams(params);
     }
@@ -279,14 +279,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void setupWithExoController() {
-        // 监听控制器的显示/隐藏
+        // Show/hide the listener controller
         playerView.setControllerVisibilityListener(new PlayerControlView.VisibilityListener() {
             @Override
             public void onVisibilityChange(int visibility) {
                 ImageButton btnFullscreen = findViewById(R.id.btn_custom_fullscreen);
                 ImageButton btnBack = findViewById(R.id.btn_custom_back);
                 if (btnFullscreen != null) {
-                    // 控制器显示时显示按钮，隐藏时隐藏按钮
+                    // The buttons are displayed when the controller is on, and hidden when the controller is off
                     btnFullscreen.setVisibility(visibility);
                 }
                 if (btnBack != null) {
@@ -297,26 +297,26 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
 
-    //初始化播放器的方法
+    // Methods for initializing the player
     private void InitializePlayer() {
-        //创建播放器实例
+        // Create a player instance
         player = new SimpleExoPlayer.Builder(this).build();
-        //将播放器绑定于视图
+        // Bind the player to the view
         playerView.setPlayer(player);
         playerView.setUseController(true);
 
-        //创建播放具体内容，后续调整为视频仓库中和视频接口内的内容
+        // The specific content to be played will be created and subsequently adjusted to include content from the video repository and video API
         Uri videoUri = Uri.parse(currentVideo.getVideoPath());
         MediaItem mediaItem = MediaItem.fromUri(videoUri);
 
-        //设置让媒体播放器开始播放
+        // Configure the media player to start playing
         player.setMediaItem(mediaItem);
 
         player.addListener(new Player.EventListener() {
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                 if (playbackState == Player.STATE_READY) {
-                    Log.d("PlayerDebug", "播放器准备就绪，记录浏览历史");
+                    Log.d("PlayerDebug", "The player is ready and will record your browsing history");
                     recordBrowseHistory();
                 }
             }
@@ -324,13 +324,13 @@ public class PlayerActivity extends AppCompatActivity {
         player.prepare();
 
 
-        //自动播放
+        //Auto play
         player.play();
     }
 
-    // 设置视频信息显示
+    // Set video information display
     private void setupVideoInfoDisplay() {
-        // 绑定UI组件
+        // Binding UI components
         TextView tvTitle = findViewById(R.id.tv_video_title);
         TextView tvUploader = findViewById(R.id.tv_uploader);
         TextView tvStats = findViewById(R.id.tv_video_stats);
@@ -341,15 +341,15 @@ public class PlayerActivity extends AppCompatActivity {
         TextView tvCatagory = findViewById(R.id.tv_video_catagory);
 
 
-        // 使用VideoItem的业务方法显示数据
+        // Display data using VideoItem's business methods
         if (tvTitle != null) {
             tvTitle.setText(currentVideo.getTitle());
         }
         if (tvUploader != null) {
-            tvUploader.setText("上传者: " + currentVideo.getUploaderName());
+            tvUploader.setText("Uploader: " + currentVideo.getUploaderName());
         }
         if (tvStats != null) {
-            tvStats.setText("播放次数:" + currentVideo.getPlayCount());
+            tvStats.setText("Play count:" + currentVideo.getPlayCount());
         }
         if (tvDescription != null) {
             tvDescription.setText(currentVideo.getDescription());
@@ -358,13 +358,13 @@ public class PlayerActivity extends AppCompatActivity {
             tvResolution.setText(currentVideo.getFormatResolution());
         }
         if (tvSize != null) {
-            tvSize.setText("视频大小:" + currentVideo.getFormattedFileSize());
+            tvSize.setText("Video size:" + currentVideo.getFormattedFileSize());
         }
         if (tvUploadTime != null) {
-            tvUploadTime.setText("上传时间:" + currentVideo.getFormatUploadTime());
+            tvUploadTime.setText("Upload time:" + currentVideo.getFormatUploadTime());
         }
         if (tvCatagory != null) {
-            tvCatagory.setText("标签：" + currentVideo.getCategory());
+            tvCatagory.setText("Label：" + currentVideo.getCategory());
         }
 
     }
@@ -380,22 +380,22 @@ public class PlayerActivity extends AppCompatActivity {
 
 
     private void setupRecyclerView() {
-        // 使用单列布局
+        // Use single-column layout
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 复用横向布局适配器
+        // Reuse landscape layout adapter
         adapter = new videoHotAdapter(recommendedVideos);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((position, video) -> {
-            Log.d("VideoJump", "跳转到视频: " + video.getTitle());
+            Log.d("VideoJump", "Jump to video: " + video.getTitle());
 
             if (player != null && player.isPlaying()) {
                 player.pause();
             }
 
-            // 创建新的播放页
+            // Create a new playback page
             Intent intent = new Intent(PlayerActivity.this, PlayerActivity.class);
             intent.putExtra("video_data", video);
             startActivity(intent);
@@ -407,11 +407,11 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void loadRecommendations() {
-        // 获取推荐视频数据（排除当前播放的视频）
+        // Get recommended video data (excluding the currently playing video)
         VideoAPIService.getHomeVideo(1, 20, new VideoAPIService.VideoLoadCallback() {
             @Override
             public void onSuccess(List<VideoItem> videos) {
-                // 处理推荐数据（排除当前播放的视频）
+                // Process recommendation data (excluding the currently playing video)
                 List<VideoItem> processedVideos = processRecommendations(videos);
                 recommendedVideos = processedVideos;
                 adapter.setVideoList(recommendedVideos);
@@ -419,7 +419,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                // 网络失败，使用备用数据
+                // Network failure, using backup data
                 List<VideoItem> allVideos = MockVideoService.getHomeVideo();
                 List<VideoItem> processedVideos = processRecommendations(allVideos);
                 recommendedVideos = processedVideos;
@@ -431,17 +431,17 @@ public class PlayerActivity extends AppCompatActivity {
     private List<VideoItem> processRecommendations(List<VideoItem> allVideos) {
         List<VideoItem> result = new ArrayList<>();
 
-        // 调整筛选逻辑，不推荐自己，打乱顺序
+        // Adjust the filtering logic, do not recommend yourself, and shuffle the order
         for (VideoItem video : allVideos) {
             if (!video.getVideoId().equals(currentVideo.getVideoId())) {
                 result.add(video);
             }
         }
 
-        // 打乱所有除自己外的推荐视频
+
         Collections.shuffle(result);
 
-        // 打乱后取前十个
+        // Take the first ten after shuffling
         if (result.size() > 10) {
             result = result.subList(0, 10);
         }
@@ -458,7 +458,7 @@ public class PlayerActivity extends AppCompatActivity {
                 List<VideoItem> newVideos = processRecommendations(videos);
                 adapter.setVideoList(newVideos);
                 RefreshUtils.stopRefresh(swipeRefresh);
-                Toast.makeText(PlayerActivity.this, "推荐已更新", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayerActivity.this, "Recommendations have been updated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -502,8 +502,8 @@ public class PlayerActivity extends AppCompatActivity {
                 player.play();
             }
 
-            // 简单的文字提示
-            String message = player.isPlaying() ? "播放" : "暂停";
+            // Simple text prompts
+            String message = player.isPlaying() ? "Play" : "Pause";
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }

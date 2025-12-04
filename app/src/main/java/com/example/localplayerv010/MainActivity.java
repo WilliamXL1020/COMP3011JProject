@@ -28,27 +28,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         UserPrefs.logout(this);
-        // 测试网络连接（可选，根据你的需求决定是否保留）
+        // Test network connectivity (optional, keep it depending on your needs)
         testNetworkOnStart();
 
-        // 检查登录状态并跳转到对应页面
+        // Check login status and redirect to the corresponding page
         checkLoginState();
 
-        // 注意：这里不需要 setContentView，因为 MainActivity 只是启动页
-        // 也不需要调用 finish()，因为 checkLoginState() 方法内部会调用
+        // Note: setContentView is not needed here because MainActivity is just the launch page
+        // There's no need to call `finish()`, because the `checkLoginState()` method will call it internally.
     }
 
     private void checkLoginState() {
         if (UserPrefs.isLoggedIn(this)) {
-            // 已登录，跳转到首页
-            Log.d("MainActivity", "用户已登录，跳转到首页");
+            // Logged in, redirected to homepage
+            Log.d("MainActivity", "The user is logged in and has been redirected to the homepage");
             startActivity(new Intent(this, HomeActivity.class));
         } else {
-            // 未登录，跳转到登录页
-            Log.d("MainActivity", "用户未登录，跳转到登录页");
+            // Not logged in, redirected to the login pag
+            Log.d("MainActivity", "The user is not logged in, they will be redirected to the login page");
             startActivity(new Intent(this, LoginActivity.class));
         }
-        finish(); // 关闭 MainActivity，避免用户按返回键回到启动页
+        finish(); // Close MainActivity to prevent users from returning to the launch page by pressing the back button
     }
 
     private void testNetworkOnStart() {
@@ -57,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 if (isConnected) {
-                    Log.d("Network", "✅ Pexels API连接成功！");
-                    // 可以去掉Toast，避免在启动页显示
-                    // Toast.makeText(MainActivity.this, "网络连接正常", Toast.LENGTH_SHORT).show();
+                    Log.d("Network", "✅ Pexels API connection successful!");
+                    // You can remove the toast message to prevent it from displaying on the splash screen
+                    // Toast.makeText(MainActivity.this, "Network connection is normal", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("Network", "❌ Pexels API连接失败");
-                    // 可以去掉Toast，避免在启动页显示
-                    // Toast.makeText(MainActivity.this, "网络连接失败，请检查API密钥或网络", Toast.LENGTH_LONG).show();
+                    Log.e("Network", "❌ Pexels API connection failed.");
+                    // You can remove the toast message and avoid displaying it on the splash screen
+                    // Toast.makeText(MainActivity.this, "Network connection failed. Please check your API key or network", Toast.LENGTH_LONG).show();
                 }
             });
         }).start();

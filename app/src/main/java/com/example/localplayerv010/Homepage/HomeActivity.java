@@ -22,7 +22,7 @@ import com.example.localplayerv010.utils.SearchUtils;
 
 public class HomeActivity extends AppCompatActivity {
     private LinearLayout tabHome, tabFollow, tabUpload, tabVip, tabProfile;
-    private int currentTab = -1; // 0:首页, 1:关注, 2:上传, 3:VIP, 4:我的
+    private int currentTab = -1; // 0: Homepage, 1: Following, 2: Uploads, 3: VIP, 4: My Account
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,26 +44,26 @@ public class HomeActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
     private void setupBottomNavigation() {
-        // 找到底部导航的各个tab
+        // Find the tabs in the bottom navigation
         tabHome = findViewById(R.id.tab_home);
         tabFollow = findViewById(R.id.tab_follow);
         tabUpload = findViewById(R.id.tab_upload);
         tabVip = findViewById(R.id.tab_vip);
         tabProfile = findViewById(R.id.tab_profile);
 
-        // 设置点击监听
+        // Set click listener
         tabHome.setOnClickListener(v -> switchTab(0));
         tabFollow.setOnClickListener(v -> switchTab(1));
         tabUpload.setOnClickListener(v -> switchTab(2));
         tabVip.setOnClickListener(v -> switchTab(3));
         tabProfile.setOnClickListener(v -> switchTab(4));
 
-        // 默认选中首页
+        // Homepage is selected by default
         switchTab(0);
     }
 
     private void switchTab(int tabPosition) {
-        boolean isFirstTime = (currentTab == -1); // 用-1表示初始状态
+        boolean isFirstTime = (currentTab == -1); // -1 represents the initial state
         boolean isSameTab = (currentTab == tabPosition);
 
         if (!isFirstTime && isSameTab) {
@@ -72,23 +72,23 @@ public class HomeActivity extends AppCompatActivity {
 
         currentTab = tabPosition;
 
-        // 重置所有tab状态
+        // Reset all tab states
         resetAllTabs();
 
-        // 设置选中状态
+        // Set the selected state
         switch (tabPosition) {
-            case 0: // 首页
+            case 0: // homepage
                 setTabSelected(tabHome, true);
-                // 显示HomeFragment（包含分区栏）
+                // Show the HomeFragment (including the category bar)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new HomeFragment())
                         .commit();
                 break;
-            case 1: // 关注
+            case 1: // focus on
                 setTabSelected(tabFollow, true);
 //                showFollowFragment();
                 break;
-            case 2: // 上传
+            case 2: // Upload
                 setTabSelected(tabUpload, true);
 //                showUploadDialog();
                 break;
@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                 setTabSelected(tabVip, true);
 //                showVipFragment();
                 break;
-            case 4: // 我的
+            case 4: // Mine
                 setTabSelected(tabProfile, true);
                 showProfileFragment();
                 break;
@@ -120,11 +120,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setTabSelected(LinearLayout tabView, boolean selected) {
-        // 找到tab中的TextView和ImageView
+        // Find the TextView and ImageView in the tab
         TextView textView = null;
         ImageView imageView = null;
 
-        // 遍历子View找到TextView和ImageView
+        // Iterate through the child Views to find the TextView and ImageView
         for (int i = 0; i < tabView.getChildCount(); i++) {
             View child = tabView.getChildAt(i);
             if (child instanceof TextView) {
@@ -134,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        // 设置文字颜色
+        // Set text color
         if (textView != null) {
             textView.setTextColor(getResources().getColor(
                     selected ? R.color.red : R.color.gray

@@ -1,4 +1,4 @@
-//json获取数据信息转换为videoitem信息
+//Convert JSON data to videoitem information
 
 package com.example.localplayerv010.utils;
 
@@ -22,49 +22,49 @@ public class VideoConverter {
 
         VideoItem videoItem = new VideoItem();
 
-        // ID转换：int → String
+        // ID conversion: int → String
         videoItem.setVideoId(String.valueOf(pexelsVideo.getId()));
 
-        // 标题：Pexels没有title字段，需要创建
+        // Title: Pexels does not have a title field; it needs to be created
         String title = createTitle(pexelsVideo);
         videoItem.setTitle(title);
 
-        // 描述
-        videoItem.setDescription("来自Pexels的优质视频内容");
+        // description
+        videoItem.setDescription("High-quality video content from Pexels");
 
-        // 视频路径：选择最佳质量的视频链接
+        // Video path: Select the video link with the best quality
         videoItem.setVideoPath(getBestVideoUrl(pexelsVideo));
 
-        // 时长转换：秒 → 毫秒
+        // Duration conversion: seconds → milliseconds
         videoItem.setDuration(pexelsVideo.getDuration() * 1000L);
 
-        // 上传者
+        // Uploader
         if (pexelsVideo.getUser() != null) {
             videoItem.setUploaderName(pexelsVideo.getUser().getName());
         } else {
-            videoItem.setUploaderName("Pexels用户");
+            videoItem.setUploaderName("Pexels users");
         }
 
 
 
         if (pexelsVideo.getImage() != null) {
             videoItem.setThumbnailUrl(pexelsVideo.getImage());
-            Log.d("VideoConverter", "✅ 设置视频封面: " + pexelsVideo.getImage());
+            Log.d("VideoConverter", "✅ Set video cover: " + pexelsVideo.getImage());
         } else if (pexelsVideo.getVideo_pictures() != null &&
                 !pexelsVideo.getVideo_pictures().isEmpty()) {
-            // 如果没有主缩略图，使用第一张预览图
+            // If there is no main thumbnail, use the first preview image
             String firstPreview = pexelsVideo.getVideo_pictures().get(0).getPicture();
             videoItem.setThumbnailUrl(firstPreview);
-            Log.d("VideoConverter", "✅ 使用预览图作为封面: " + firstPreview);
+            Log.d("VideoConverter", "✅ Use the preview image as the cover: " + firstPreview);
         } else {
-            Log.w("VideoConverter", "⚠️ 没有找到可用的封面图片");
+            Log.w("VideoConverter", "⚠️ No available cover image found");
         }
 
-        // 设置默认的业务数据（因为Pexels API不提供这些）
-        videoItem.setPlayCount(1000 + (int)(Math.random() * 1000)); // 随机播放量
-        videoItem.setLikeCount(50 + (int)(Math.random() * 100));   // 随机点赞数
-        videoItem.setCategory("精选"); // 默认分类
-        videoItem.setFileSize(10485760L); // 默认文件大小10MB
+        // Set default business data (because the Pexels API does not provide this)
+        videoItem.setPlayCount(1000 + (int)(Math.random() * 1000)); // Random play count
+        videoItem.setLikeCount(50 + (int)(Math.random() * 100));   // Random number of likes
+        videoItem.setCategory("selected"); // Default Category
+        videoItem.setFileSize(10485760L); // Default file size 10MB
 
         return videoItem;
     }
@@ -86,56 +86,56 @@ public class VideoConverter {
 
 
     private static String getBestVideoUrl(PexelsVideo pexelsVideo) {
-        Log.d("VideoConverter", "=== 开始获取视频URL，ID: " + pexelsVideo.getId() + " ===");
+        Log.d("VideoConverter", "=== Starting to get video URL, ID: " + pexelsVideo.getId() + " ===");
 
-        // 检查video_files是否存在
+        // Check if video_files exists
         if (pexelsVideo.getVideo_files() == null) {
-            Log.e("VideoConverter", "❌ video_files为null");
+            Log.e("VideoConverter", "❌ video_files is null");
             return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
         }
 
         if (pexelsVideo.getVideo_files().isEmpty()) {
-            Log.e("VideoConverter", "❌ video_files为空数组");
+            Log.e("VideoConverter", "❌ video_files is Empty array");
             return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
         }
 
-        Log.d("VideoConverter", "✅ video_files数量: " + pexelsVideo.getVideo_files().size());
+        Log.d("VideoConverter", "✅ video_files amounts: " + pexelsVideo.getVideo_files().size());
 
-        // 检查第一个文件的基本信息
+        // Check the basic information of the first file
         VideoFile firstFile = pexelsVideo.getVideo_files().get(0);
-        Log.d("VideoConverter", "第一个文件 - quality: " + firstFile.getQuality() +
+        Log.d("VideoConverter", "first file - quality: " + firstFile.getQuality() +
                 ", file_type: " + firstFile.getFileType() +
                 ", link: " + firstFile.getLink());
 
-        // 原来的选择逻辑...
+        // The original selection logic...
         for (VideoFile file : pexelsVideo.getVideo_files()) {
             if ("hd".equals(file.getQuality()) && "video/mp4".equals(file.getFileType())) {
-                Log.d("VideoConverter", "✅ 找到HD MP4视频: " + file.getLink());
+                Log.d("VideoConverter", "✅ Find HD MP4 videos: " + file.getLink());
                 return file.getLink();
             }
         }
 
-        // 如果没有hd，返回第一个mp4文件
+        // If hd is not available, return the first mp4 file
         for (VideoFile file : pexelsVideo.getVideo_files()) {
             if ("video/mp4".equals(file.getFileType())) {
-                Log.d("VideoConverter", "✅ 找到SD MP4视频: " + file.getLink());
+                Log.d("VideoConverter", "✅ Find SD MP4 videos: " + file.getLink());
                 return file.getLink();
             }
         }
 
-        // 如果还没有，返回第一个文件
+        // If not yet, return to the first file
         String firstUrl = pexelsVideo.getVideo_files().get(0).getLink();
         return firstUrl;
     }
 
     private static String createTitle(PexelsVideo pexelsVideo) {
-        Log.d("VideoConverter", "创建标题，user: " + (pexelsVideo.getUser() != null ? pexelsVideo.getUser().getName() : "null"));
+        Log.d("VideoConverter", "create topic，user: " + (pexelsVideo.getUser() != null ? pexelsVideo.getUser().getName() : "null"));
 
         if (pexelsVideo.getUser() != null && pexelsVideo.getUser().getName() != null) {
-            return pexelsVideo.getUser().getName() + "的精彩视频";
+            return pexelsVideo.getUser().getName() + "'s magnificent videos";
         } else {
             // 如果user为null，使用其他信息创建标题
-            return "精彩视频 " + pexelsVideo.getId();
+            return "magnificent video " + pexelsVideo.getId();
         }
     }
 }

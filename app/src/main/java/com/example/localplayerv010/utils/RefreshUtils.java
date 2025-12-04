@@ -8,7 +8,7 @@ public class RefreshUtils {
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (refreshLogic != null) {
-                refreshLogic.run(); // 直接执行传入的逻辑
+                refreshLogic.run(); // Execute the passed-in logic directly
             }
         });
     }

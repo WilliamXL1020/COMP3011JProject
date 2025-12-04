@@ -24,7 +24,7 @@ public class User {
 
 
 
-    // 构造方法
+    // Constructor
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -34,7 +34,7 @@ public class User {
         this.lastLoginTime = System.currentTimeMillis();
     }
 
-    // Getter 和 Setter 方法
+    // Getter and Setter methods
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

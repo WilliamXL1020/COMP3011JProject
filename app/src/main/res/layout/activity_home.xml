@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 顶部栏（搜索、用户等） -->
+    <!-- Top bar (search, users, etc.) -->
     <include layout="@layout/toolbar" />
 
     <!-- 分区导航 -->

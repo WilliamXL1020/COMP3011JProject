@@ -54,21 +54,21 @@ public class videoRecyclerAdapter extends RecyclerView.Adapter<videoRecyclerAdap
 
 
         if (video.getThumbnailUrl() != null && !video.getThumbnailUrl().isEmpty()) {
-            // 使用 Glide 加载网络图片
+            // Loading network images using Glide
             Glide.with(holder.itemView.getContext())
                     .load(video.getThumbnailUrl())
-                    .placeholder(R.drawable.default_avatar) // 你的默认图片
-                    .error(R.drawable.default_avatar)       // 加载失败时
-                    .diskCacheStrategy(DiskCacheStrategy.ALL) // 添加磁盘缓存
-                    .skipMemoryCache(false) // 启用内存缓存
+                    .placeholder(R.drawable.default_avatar) // Your default image
+                    .error(R.drawable.default_avatar)       // When loading fails
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Add disk caching
+                    .skipMemoryCache(false) // Enable memory caching
                     .into(holder.ivCover);
         } else {
             holder.ivCover.setImageResource(R.drawable.default_avatar);
         }
 
-        Log.d("AdapterDebug", "绑定位置: " + position +
-                ", 标题: " + video.getTitle() +
-                ", 路径: " + video.getVideoPath());
+        Log.d("AdapterDebug", "Binding location: " + position +
+                ", title: " + video.getTitle() +
+                ", route: " + video.getVideoPath());
 
         holder.tvTitle.setText(video.getTitle());
         holder.tvUploader.setText(video.getUploaderName());
@@ -82,7 +82,7 @@ public class videoRecyclerAdapter extends RecyclerView.Adapter<videoRecyclerAdap
     }
     @Override
     public int getItemCount() {
-        Log.d("AdapterDebug", "getItemCount返回: " + videoList.size());
+        Log.d("AdapterDebug", "getItemCount return: " + videoList.size());
         return videoList.size();
     }
 

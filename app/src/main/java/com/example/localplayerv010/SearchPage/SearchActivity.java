@@ -48,16 +48,16 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d("SearchActivity", "收到新的搜索意图");
-        setIntent(intent); // 重要：更新当前Intent
+        Log.d("SearchActivity", "Received new search intent");
+        setIntent(intent); // Important: Update the current Intent
 
-        // 重置状态
+        // Reset status
         searchResult.clear();
         currentPage = 1;
         hasMorePages = true;
         isLoadingMore = false;
 
-        // 重新处理Intent
+        // Reprocess Intent
         handleIntent(intent);
     }
 
@@ -91,29 +91,29 @@ public class SearchActivity extends AppCompatActivity {
             currentPage = intent.getIntExtra("current_page", 1);
             hasMorePages = intent.getBooleanExtra("has_more_pages", true);
 
-            tvSearchTitle.setText("搜索: " + currentQuery + " (第" + currentPage + "页)");
+            tvSearchTitle.setText("search: " + currentQuery + " (page " + currentPage + ")");
 
-            // 检查是否有预加载的结果
+            // Check if there are any preloaded results
             if (intent.hasExtra("search_results")) {
                 ArrayList<VideoItem> preloadedResults = intent.getParcelableArrayListExtra("search_results");
                 if (preloadedResults != null) {
                     searchResult = preloadedResults;
                     adapter.setVideoList(searchResult);
-                    Log.d("SearchActivity", "使用预加载结果: " + searchResult.size() + " 个视频");
+                    Log.d("SearchActivity", "Using preloaded results: " + searchResult.size() + " videos");
                     return;
                 }
             }
 
-            // 检查是否搜索失败
+            // Check if the search failed
             if (intent.getBooleanExtra("search_failed", false)) {
                 List<VideoItem> allVideos = MockVideoService.getHomeVideo();
                 searchResult = filterVideosByQuery(allVideos, currentQuery);
                 adapter.setVideoList(searchResult);
-                Toast.makeText(this, "使用本地数据", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Use local data", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 如果没有预加载结果，正常执行搜索
+            // If no preloaded results are found, perform the search normally
             performSearch(currentQuery, currentPage, false);
         }
     }

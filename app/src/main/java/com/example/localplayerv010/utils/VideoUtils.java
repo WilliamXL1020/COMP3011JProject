@@ -13,13 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 public class VideoUtils {
-    //工具类一般都是静态方法不需要实例
+    // Utility classes are generally static methods and do not require instances
 
     private VideoUtils(){
-        throw new IllegalStateException("工具类不要实例化");
+        throw new IllegalStateException("Do not instantiate utility classes");
     }
 
-    //毫秒转具体时间表现
+    // Milliseconds to specific time representation
     public static String formatDuration(long durationMs){
         if (durationMs <= 0) return "00:00";
 
@@ -34,41 +34,41 @@ public class VideoUtils {
         }
     }
 
-    //秒转时间表现
+    // Refresh rate performance
     public static String fomatDurationSecond(int seconds){
         return formatDuration((long)seconds * 1000L);
     }
 
 
-    //文字时间格式，毫秒版本
+    // Text time format, millisecond version
     public static String formatDurationDetailed(long durationMs) {
-        if (durationMs <= 0) return "0分钟";
+        if (durationMs <= 0) return "0min";
 
         long totalMinutes = durationMs / (1000 * 60);
         long hours = totalMinutes / 60;
         long minutes = totalMinutes % 60;
 
         if (hours > 0) {
-            return String.format("%d小时%d分钟", hours, minutes);
+            return String.format("%hurs%dmins", hours, minutes);
         } else {
-            return String.format("%d分钟", minutes);
+            return String.format("%dmins", minutes);
         }
     }
 
-    //文字时间格式，秒版本
+    //Text time format, seconds version
     public static String formatDurationDetailedFromSeconds(int totalSeconds) {
-        if (totalSeconds <= 0) return "0秒";
+        if (totalSeconds <= 0) return "0sec";
 
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int secs = totalSeconds % 60;
 
         if (hours > 0) {
-            return String.format("%d小时%d分钟", hours, minutes);
+            return String.format("%d hur%d min", hours, minutes);
         } else if (minutes > 0) {
-            return String.format("%d分钟%d秒", minutes, secs);
+            return String.format("%d mins%d secs", minutes, secs);
         } else {
-            return String.format("%d秒", secs);
+            return String.format("%d secs", secs);
         }
     }
 
@@ -77,14 +77,14 @@ public class VideoUtils {
 
 
 
-    //这里开始写针对文件大小的格式工具类
+    // Here we begin writing a formatting utility class for file sizes
     public static String formatFileSize(long sizeBytes) {
         if (sizeBytes <= 0) return "0 B";
 
         final String[] units = {"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(sizeBytes) / Math.log10(1024));
 
-        // 防止数组越界避免超过gb的存在
+        // Prevent array out-of-bounds access and avoid arrays exceeding GB
         digitGroups = Math.min(digitGroups, units.length - 1);
 
         return String.format("%.1f %s", sizeBytes / Math.pow(1024, digitGroups), units[digitGroups]);
@@ -92,7 +92,7 @@ public class VideoUtils {
 
 
 
-    //数字处理工具类
+    //Digital processing tools
     public static String formatCount(int count) {
         if (count < 0) return "0";
         if (count < 1000) return String.valueOf(count);
@@ -101,15 +101,15 @@ public class VideoUtils {
         return String.format("%.1f亿", count / 100000000.0);
     }
 
-    //时间处理工具类
+    //Time processing utility class
     public static String formatUploadTime(Date uploadTime) {
-        if (uploadTime == null) return "未知时间";
+        if (uploadTime == null) return "unknown time";
 
         long currentTime = System.currentTimeMillis();
         long uploadTimeMs = uploadTime.getTime();
         long diff = currentTime - uploadTimeMs;
 
-        if (diff < 0) return "未来时间";
+        if (diff < 0) return "future time";
 
         long seconds = diff / 1000;
         long minutes = seconds / 60;
@@ -119,24 +119,24 @@ public class VideoUtils {
         long months = days / 30;
         long years = days / 365;
 
-        if (seconds < 60) return "刚刚";
-        if (minutes < 60) return minutes + "分钟前";
-        if (hours < 24) return hours + "小时前";
-        if (days == 1) return "昨天";
-        if (days < 7) return days + "天前";
-        if (weeks < 4) return weeks + "周前";
-        if (months < 12) return months + "个月前";
-        return years + "年前";
+        if (seconds < 60) return "just now";
+        if (minutes < 60) return minutes + "minutes ago";
+        if (hours < 24) return hours + "hours ago";
+        if (days == 1) return "yesterday";
+        if (days < 7) return days + "days ago";
+        if (weeks < 4) return weeks + "weeks ago";
+        if (months < 12) return months + "months ago";
+        return years + "years ago";
     }
 
-    //分辨率格式化工具类
+    // Resolution formatting utility class
     public static String formatResolution(int width, int height) {
-        if (width <= 0 || height <= 0) return "未知分辨率";
+        if (width <= 0 || height <= 0) return "Unknown resolution";
         return width + "×" + height;
     }
-    //分辨率标签
+    // Resolution label
     public static String getResolutionTag(int width, int height) {
-        if (width <= 0 || height <= 0) return "未知";
+        if (width <= 0 || height <= 0) return "unknown";
 
         int longerSide = Math.max(width, height);
 
@@ -145,9 +145,9 @@ public class VideoUtils {
         if (longerSide >= 1920) return "1080P";
         if (longerSide >= 1280) return "720P";
         if (longerSide >= 854) return "480P";
-        return "标清";
+        return "Standard";
     }
-    //分辨率信息
+    // Resolution information
     public static String getFullResolutionInfo(int width, int height) {
         return formatResolution(width, height) + " (" + getResolutionTag(width, height) + ")";
     }

@@ -8,7 +8,7 @@ public class PexelsVideo {
     private int height;
     private String url;
     private String image;
-    private Object full_res; // 可能是null，用Object
+    private Object full_res; // It might be null; use Object
     private List<String> tags;
     private int duration;
     private UserOnline user;
@@ -123,14 +123,14 @@ public class PexelsVideo {
     public String getBestQualityVideoUrl() {
         if (video_files == null || video_files.isEmpty()) return null;
 
-        // 优先返回hd质量的视频
+        // Prioritize returning HD quality videos
         for (VideoFile file : video_files) {
             if ("hd".equals(file.getQuality())) {
                 return file.getLink();
             }
         }
 
-        // 如果没有hd，返回第一个
+        // If hd is not present, return the first one
         return video_files.get(0).getLink();
     }
 }
