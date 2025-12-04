@@ -96,9 +96,9 @@ public class VideoUtils {
     public static String formatCount(int count) {
         if (count < 0) return "0";
         if (count < 1000) return String.valueOf(count);
-        if (count < 10000) return String.format("%.1f千", count / 1000.0);
-        if (count < 100000000) return String.format("%.1f万", count / 10000.0);
-        return String.format("%.1f亿", count / 100000000.0);
+        if (count < 10000) return String.format("%.1fK", count / 1000.0);
+        if (count < 100000000) return String.format("%.1fM", count / 100000.0);
+        return String.format("%.1fB", count / 1000000000.0);
     }
 
     //Time processing utility class

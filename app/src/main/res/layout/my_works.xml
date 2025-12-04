@@ -10,18 +10,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 页面标题 -->
+        <!-- Page Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="我的作品"
+            android:text="My work"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#333333"
             android:gravity="center"
             android:layout_marginBottom="24dp" />
 
-        <!-- 作品1 -->
+        <!-- Work 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="移动应用设计"
+                android:text="Mobile application design"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="一款创新的社交媒体应用界面设计，注重用户体验和视觉美感"
+                android:text="An innovative social media application interface design that emphasizes user experience and visual aesthetics."
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="12dp"
@@ -58,7 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="UI/UX设计"
+                    android:text="UI/UX Design"
                     android:textSize="12sp"
                     android:textColor="#888888"
                     android:background="@color/white"
@@ -76,7 +76,7 @@
 
         </LinearLayout>
 
-        <!-- 作品2 -->
+        <!-- Work 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="品牌标识设计"
+                android:text="Brand logo design"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"
@@ -97,7 +97,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="为科技公司设计的现代化品牌标识系统，包含logo、色彩和字体规范"
+                android:text="A modern brand identity system designed for technology companies, including logo, color, and typography specifications"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="12dp"
@@ -113,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="品牌设计"
+                    android:text="Brand Design"
                     android:textSize="12sp"
                     android:textColor="#888888"
                     android:background="@color/white"
@@ -131,7 +131,7 @@
 
         </LinearLayout>
 
-        <!-- 作品3 -->
+        <!-- Work 3 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="摄影作品集"
+                android:text="Photo Collection"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"
@@ -152,7 +152,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="城市风光与人文纪实摄影作品，捕捉生活中的美好瞬间"
+                android:text="Urban landscape and documentary photography, capturing beautiful moments in life"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="12dp"
@@ -168,7 +168,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="摄影"
+                    android:text="photography"
                     android:textSize="12sp"
                     android:textColor="#888888"
                     android:background="@color/white"
@@ -186,7 +186,7 @@
 
         </LinearLayout>
 
-        <!-- 作品4 -->
+        <!-- Work 4 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -198,7 +198,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="插画创作"
+                android:text="Illustration Creation"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"
@@ -207,7 +207,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="数字插画系列作品，展现独特的艺术风格和创意表达"
+                android:text="The digital illustration series showcases a unique artistic style and creative expression"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="12dp"
@@ -223,7 +223,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="插画"
+                    android:text="illustration"
                     android:textSize="12sp"
                     android:textColor="#888888"
                     android:background="@color/white"
@@ -241,11 +241,11 @@
 
         </LinearLayout>
 
-        <!-- 底部说明 -->
+        <!-- Bottom Description -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="更多作品正在创作中..."
+            android:text="More works are in the works..."
             android:textSize="14sp"
             android:textColor="#999999"
             android:gravity="center"

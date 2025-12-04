@@ -7,7 +7,7 @@
     android:background="@color/background"
     android:layout_margin="4dp">
 
-    <!-- 图片容器 - 宽度通过权重控制 -->
+    <!-- Image container - width controlled by weights -->
     <ImageView
     android:id="@+id/iv_cover"
     android:layout_width="match_parent"
@@ -17,7 +17,7 @@
     android:src="@drawable/default_avatar"
     />
 
-    <!-- 信息区域 -->
+    <!-- Information area -->
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -25,20 +25,20 @@
     android:orientation="vertical"
     android:paddingTop="4dp">
 
-        <!-- 标题区域 -->
+        <!-- Title area -->
         <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="视频标题"
+        android:text="Video title"
         android:textColor="@android:color/black"
         android:textSize="14sp"
         android:maxLines="2"
         android:ellipsize="end"
         android:gravity="center_vertical"/>
 
-        <!-- 底部信息行 - 一左一右 -->
+        <!-- Bottom information lines - one on the left and one on the right -->
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -46,25 +46,25 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
-    <!-- 左边：上传者 -->
+            <!-- Left side: Uploader -->
             <TextView
                 android:id="@+id/tv_uploader"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="上传者"
+                android:text="Uploader"
                 android:textColor="#666666"
                 android:textSize="12sp"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"/>
 
-            <!-- 右边：播放量 -->
+            <!-- Right side: View count -->
             <TextView
                 android:id="@+id/tv_play_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="10万播放"
+                android:text="100,000 views"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:gravity="center_vertical|end"/>

@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- 顶部工具栏 -->
+    <!-- Top toolbar -->
 
 
-    <!-- 内容区域 -->
+    <!-- Content area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 统计卡片 -->
+            <!-- Statistics Cards -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,23 +32,23 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="观看统计"
+                    android:text="Viewing statistics"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
                     android:layout_marginBottom="16dp" />
 
-                <!-- 分类统计 -->
+                <!-- Categorical Statistics -->
                 <TextView
                     android:id="@+id/tv_category_stats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="统计加载中..."
+                    android:text="Statistics loading..."
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:lineSpacingExtra="4dp" />
 
-                <!-- 总观看数 -->
+                <!-- Total Views -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="总观看视频数"
+                        android:text="Total number of videos viewed"
                         android:textSize="14sp"
                         android:textColor="@android:color/black" />
 
@@ -79,7 +79,7 @@
 
             </LinearLayout>
 
-            <!-- 浏览记录列表标题 -->
+            <!-- Browsing history list title -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="最近观看"
+                    android:text="Recently watched"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black" />
@@ -100,7 +100,7 @@
                     android:id="@+id/tv_clear_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="清空记录"
+                    android:text="Clear records"
                     android:textSize="12sp"
                     android:textColor="#999999"
                     android:padding="8dp"
@@ -108,18 +108,18 @@
 
             </LinearLayout>
 
-            <!-- 空状态提示 -->
+            <!-- Empty state prompt -->
             <TextView
                 android:id="@+id/tv_empty_history"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:text="暂无浏览记录"
+                android:text="No browsing history"
                 android:textSize="16sp"
                 android:textColor="#999999"
                 android:gravity="center"
                 android:visibility="gone" />
 
-            <!-- 浏览记录列表 -->
+            <!-- Browsing history list -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_browse_history"
                 android:layout_width="match_parent"

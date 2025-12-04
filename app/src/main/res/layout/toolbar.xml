@@ -14,24 +14,24 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <!-- 平台名字 -->
+        <!-- Platform Name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="视频平台"
+            android:text="video platform"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginEnd="16dp" />
 
-        <!-- 搜索框 -->
+        <!-- Search box -->
         <EditText
             android:id="@+id/et_search"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:hint="搜索视频..."
+            android:hint="Search for videos..."
             android:textColor="@android:color/black"
             android:textColorHint="#000000"
             android:paddingStart="12dp"
@@ -39,7 +39,7 @@
             android:maxLines="1"
             android:imeOptions="actionSearch" />
 
-        <!-- 用户头像 -->
+        <!-- User avatar -->
         <ImageView
             android:id="@+id/iv_user_avatar"
             android:layout_width="32dp"

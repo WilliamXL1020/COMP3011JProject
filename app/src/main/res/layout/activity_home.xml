@@ -7,17 +7,17 @@
     <!-- Top bar (search, users, etc.) -->
     <include layout="@layout/toolbar" />
 
-    <!-- 分区导航 -->
+    <!-- Partition Navigation -->
     <!--<include layout="@layout/categorybar" />-->
 
-    <!-- Fragment容器 -->
+    <!-- Fragment container -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- 底部导航 -->
+    <!-- Bottom navigation -->
     <include layout="@layout/bottombar" />
 
 </LinearLayout>

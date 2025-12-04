@@ -270,7 +270,7 @@ public class VideoItem implements Parcelable {
         return VideoUtils.formatDuration(Duration);
     }
     public String getFormatPlayCount(){
-        return VideoUtils.formatCount(PlayCount)+"次播放";
+        return VideoUtils.formatCount(PlayCount)+" times recorded";
     }
     public String getFormatUploadTime(){
         return VideoUtils.formatUploadTime(UploadTime);
@@ -279,7 +279,7 @@ public class VideoItem implements Parcelable {
         return VideoUtils.formatResolution(ResolutionWidth,ResolutionHeight);
     }
     public String getFormatLikeCount(){
-        return VideoUtils.formatCount(LikeCount)+"次赞";
+        return VideoUtils.formatCount(LikeCount)+" Likes";
     }
 
     public String getVideoInfoSummary() {

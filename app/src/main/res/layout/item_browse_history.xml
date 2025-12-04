@@ -8,7 +8,7 @@
     android:layout_marginBottom="8dp"
     android:gravity="center_vertical">
 
-    <!-- 视频封面 -->
+    <!-- Video Cover -->
     <ImageView
         android:id="@+id/iv_video_cover"
         android:layout_width="80dp"
@@ -16,7 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/default_avatar" />
 
-    <!-- 信息区域 -->
+    <!-- Information area -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -25,13 +25,13 @@
         android:paddingStart="12dp"
         android:paddingEnd="8dp">
 
-        <!-- 视频标题 -->
+        <!-- Video title -->
         <TextView
             android:id="@+id/tv_video_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="视频标题"
+            android:text="Video title"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -39,7 +39,7 @@
             android:ellipsize="end"
             android:gravity="top" />
 
-        <!-- 分类和观看时间 -->
+        <!-- Category and viewing time -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="分类"
+                android:text="Classification"
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:maxLines="1"
@@ -62,13 +62,13 @@
                 android:id="@+id/tv_watch_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="刚刚"
+                android:text="just"
                 android:textSize="11sp"
                 android:textColor="#999999" />
 
         </LinearLayout>
 
-        <!-- 观看时长和位置 -->
+        <!-- Viewing duration and location -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -81,7 +81,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="观看10秒"
+                android:text="Watch for 10 seconds"
                 android:textSize="11sp"
                 android:textColor="#999999" />
 
@@ -89,7 +89,7 @@
                 android:id="@+id/tv_last_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="续看"
+                android:text="Continue watching"
                 android:textSize="11sp"
                 android:textColor="@color/red"
                 android:background="@color/black"
@@ -102,14 +102,14 @@
 
     </LinearLayout>
 
-    <!-- 删除按钮 -->
+    <!-- Delete button -->
     <ImageButton
         android:id="@+id/btn_delete_history"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_delete"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="删除记录"
+        android:contentDescription="delete history"
         android:layout_marginStart="8dp" />
 
 </LinearLayout>

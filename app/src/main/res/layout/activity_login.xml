@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- 顶部工具栏 - 与首页保持一致 -->
+    <!-- Top toolbar - Keeps it consistent with the homepage -->
     <include layout="@layout/toolbar" />
 
-    <!-- 登录内容区域 -->
+    <!-- Login content area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,7 +21,7 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <!-- 登录标题 -->
+            <!-- Login title -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户登录"
+                    android:text="User Login"
                     android:textColor="@color/red"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -40,7 +40,7 @@
 
             </LinearLayout>
 
-            <!-- 用户名/邮箱输入 -->
+            <!-- Username/Email Input -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="用户名或邮箱"
+                    android:text="Username or Email"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -64,7 +64,7 @@
                     android:paddingEnd="16dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
-                    android:hint="请输入用户名或邮箱"
+                    android:hint="Please enter your username or email address"
                     android:maxLines="1" />
 
             </LinearLayout>
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="密码"
+                    android:text="password"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -93,24 +93,24 @@
                     android:paddingEnd="16dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
-                    android:hint="请输入密码"
+                    android:hint="please enter the password"
                     android:inputType="textPassword"
                     android:maxLines="1" />
 
             </LinearLayout>
 
-            <!-- 登录按钮 -->
+            <!-- Login button -->
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/red"
-                android:text="登录"
+                android:text="login"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- 注册链接 -->
+            <!-- Registration link -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="还没有账号？"
+                    android:text="Don't have an account yet?"
                     android:textColor="#666666"
                     android:textSize="14sp" />
 
@@ -129,7 +129,7 @@
                     android:id="@+id/tv_register_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="立即注册"
+                    android:text="Register Now"
                     android:textColor="@color/red"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -142,7 +142,7 @@
 
     </ScrollView>
 
-    <!-- 底部导航栏 - 与首页保持一致 -->
+    <!-- Bottom navigation bar - consistent with the homepage -->
     <include layout="@layout/bottombar" />
 
 </LinearLayout>

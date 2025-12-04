@@ -27,7 +27,7 @@
             android:layout_gravity="center|right"
             android:layout_margin="16dp"
             android:background="@drawable/ic_fullscreen"
-            android:contentDescription="全屏"
+            android:contentDescription="full screen"
             android:visibility="visible" />
         <ImageButton
             android:id="@+id/btn_custom_back"
@@ -36,7 +36,7 @@
             android:layout_gravity="top|left"
             android:layout_margin="16dp"
             android:background="@drawable/ic_arrow_back"
-            android:contentDescription="返回"
+            android:contentDescription="return"
             android:visibility="visible" />
     </com.google.android.exoplayer2.ui.PlayerView>
 
@@ -60,22 +60,22 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- 视频标题 -->
+                <!-- Video title -->
                 <TextView
                     android:id="@+id/tv_video_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="视频标题"
+                    android:text="Video title"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- 上传者信息 -->
+                <!-- Uploader information -->
                 <TextView
                     android:id="@+id/tv_video_uploader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="上传者：未知"
+                    android:text="Uploader: Unknown"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_marginTop="8dp" />
@@ -84,27 +84,27 @@
                     android:id="@+id/tv_video_uploadtime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="上传时间"
+                    android:text="Upload time"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_marginTop="8dp" />
 
-                <!-- 播放统计 -->
+                <!-- Playback statistics -->
                 <TextView
                     android:id="@+id/tv_video_stats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="播放：0次 | 点赞：0"
+                    android:text="Views: 0 | Likes: 0"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
 
-                <!-- 视频描述 -->
+                <!-- Video description -->
                 <TextView
                     android:id="@+id/tv_video_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="视频大小"
+                    android:text="Video size"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp"
@@ -114,7 +114,7 @@
                     android:id="@+id/tv_video_resolution"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="分辨率"
+                    android:text="resolution"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp"
@@ -124,7 +124,7 @@
                     android:id="@+id/tv_video_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="视频描述信息..."
+                    android:text="Video description information..."
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp"
@@ -134,7 +134,7 @@
                     android:id="@+id/tv_video_catagory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="标签"
+                    android:text="Label"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp"
@@ -152,12 +152,12 @@
         android:orientation="vertical"
         android:background="@color/list_background">
 
-        <!-- 推荐标题 -->
+        <!-- Recommended title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="推荐视频"
+            android:text="Recommended Videos"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold"

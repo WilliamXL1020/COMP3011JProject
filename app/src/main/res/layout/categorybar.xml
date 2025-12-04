@@ -21,7 +21,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <!-- 这里的分区会通过Java代码动态添加 -->
+        <!-- The partitions here will be added dynamically via Java code -->
 
 
     </LinearLayout>

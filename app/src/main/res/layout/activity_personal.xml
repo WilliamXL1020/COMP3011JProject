@@ -7,7 +7,7 @@
 
 
 
-    <!-- 个人信息主要内容区域 -->
+    <!-- Main content area of ​​personal information -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 用户头像和基本信息区域 -->
+            <!-- User avatar and basic information area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
                 android:padding="20dp"
                 android:layout_marginBottom="16dp">
 
-                <!-- 头像区域 -->
+                <!-- Avatar area -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
 
                 </RelativeLayout>
 
-                <!-- 用户名和ID -->
+               <!-- Username and ID -->
                 <TextView
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
@@ -75,12 +75,12 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="4dp" />
 
-                <!-- 个性签名 -->
+                <!-- Personal signature -->
                 <TextView
                     android:id="@+id/tv_bio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="这个人很懒，什么都没有写～"
+                    android:text="This person is lazy and didn't write anything."
                     android:textSize="14sp"
                     android:textColor="#999999"
                     android:layout_gravity="center_horizontal"
@@ -91,7 +91,7 @@
 
             </LinearLayout>
 
-            <!-- 数据统计区域 -->
+            <!-- Data statistics area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 android:paddingVertical="16dp"
                 android:layout_marginBottom="16dp">
 
-                <!-- 关注 -->
+                <!-- Follow -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
 
                 </LinearLayout>
 
-                <!-- 粉丝 -->
+                <!-- fans -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -137,20 +137,20 @@
                         android:id="@+id/tv_followers_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1.2万"
+                        android:text="12k"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="粉丝"
+                        android:text="fans"
                         android:textSize="12sp"
                         android:textColor="#666666" />
 
                 </LinearLayout>
 
-                <!-- 获赞 -->
+                <!-- Liked -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -162,14 +162,14 @@
                         android:id="@+id/tv_likes_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5.6万"
+                        android:text="56k"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="获赞"
+                        android:text="Liked"
                         android:textSize="12sp"
                         android:textColor="#666666" />
 
@@ -177,7 +177,7 @@
 
             </LinearLayout>
 
-            <!-- 功能列表区域 -->
+            <!-- Function list area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                 android:background="@drawable/card_background"
                 android:layout_marginBottom="16dp">
 
-                <!-- 编辑资料 -->
+                <!-- Edit Data -->
                 <LinearLayout
                     android:id="@+id/layout_edit_profile"
                     android:layout_width="match_parent"
@@ -204,7 +204,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="编辑资料"
+                        android:text="Editing materials"
                         android:textSize="16sp" />
 
                     <ImageView
@@ -220,7 +220,7 @@
                     android:layout_height="1dp"
                     android:background="#EEEEEE" />
 
-                <!-- 我的作品 -->
+                <!-- My Work -->
                 <LinearLayout
                     android:id="@+id/layout_my_videos"
                     android:layout_width="match_parent"
@@ -264,7 +264,7 @@
                     android:layout_height="1dp"
                     android:background="#EEEEEE" />
 
-                <!-- 我的收藏 -->
+                <!-- My Collections -->
                 <LinearLayout
                     android:id="@+id/layout_favorites"
                     android:layout_width="match_parent"
@@ -283,7 +283,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="我的收藏"
+                        android:text="My collection"
                         android:textSize="16sp" />
 
                     <ImageView
@@ -299,7 +299,7 @@
                     android:layout_height="1dp"
                     android:background="#EEEEEE" />
 
-                <!-- 浏览记录 -->
+                <!-- Browsing history -->
                 <LinearLayout
                     android:id="@+id/layout_browse_history"
                     android:layout_width="match_parent"
@@ -318,7 +318,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="浏览记录"
+                        android:text="Browsing history"
                         android:textSize="16sp" />
 
                     <TextView
@@ -343,7 +343,7 @@
                     android:layout_height="1dp"
                     android:background="#EEEEEE" />
 
-                <!-- 设置 -->
+                <!-- Settings -->
                 <LinearLayout
                     android:id="@+id/layout_settings"
                     android:layout_width="match_parent"
@@ -362,7 +362,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="设置"
+                        android:text="set up"
                         android:textSize="16sp" />
 
                     <ImageView

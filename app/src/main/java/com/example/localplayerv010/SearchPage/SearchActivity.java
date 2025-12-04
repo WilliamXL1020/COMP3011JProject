@@ -121,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
     private void performSearch(String query, int page, boolean isLoadMore) {
-        Log.d("SearchActivity", "执行搜索: " + query + " 第" + page + "页");
+        Log.d("SearchActivity", "Perform search: " + query + ", page " + page);
 
         if (!isLoadMore) {
             showLoading(true);
@@ -131,26 +131,27 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<VideoItem> videos) {
                 if (isLoadMore) {
-                    // 加载更多：追加到现有列表
+                    // Load more: Append to existing list
                     int startPosition = searchResult.size();
                     searchResult.addAll(videos);
                     adapter.notifyItemRangeInserted(startPosition, videos.size());
                     isLoadingMore = false;
 
-                    // 如果返回的视频数量少于请求数量，说明没有更多了
+                    // If the number of videos returned is less than the number requested, it means there are no more.
                     if (videos.size() < 20) {
                         hasMorePages = false;
-                        Toast.makeText(SearchActivity.this, "已加载所有结果", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, "\n" +
+                                 "All results have been loaded", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // 新搜索：替换整个列表
+                    // New search: Replace the entire list
                     searchResult = videos;
                     adapter.setVideoList(searchResult);
                     showLoading(false);
                     currentPage = page;
 
-                    // 更新标题显示页码
-                    tvSearchTitle.setText("搜索: " + currentQuery + " (第" + currentPage + "页)");
+                    // Update title to display page number
+                    tvSearchTitle.setText("search: " + currentQuery + " (page " + currentPage + ")");
                 }
 
                 updateEmptyState();
@@ -160,7 +161,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 if (isLoadMore) {
                     isLoadingMore = false;
-                    Toast.makeText(SearchActivity.this, "加载更多失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, "Loading more failed", Toast.LENGTH_SHORT).show();
                 } else {
                     List<VideoItem> allVideos = MockVideoService.getHomeVideo();
                     searchResult = filterVideosByQuery(allVideos, query);
@@ -183,7 +184,7 @@ public class SearchActivity extends AppCompatActivity {
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-                // 当滚动到底部时加载更多
+                // Load more when you scroll to the bottom
                 if (!isLoadingMore && hasMorePages &&
                         (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
                         firstVisibleItemPosition >= 0) {
@@ -220,7 +221,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void updateEmptyState() {
         if (searchResult.isEmpty()) {
-            Toast.makeText(this, "未找到相关视频", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "cannot find related video", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -230,17 +231,17 @@ public class SearchActivity extends AppCompatActivity {
         isLoadingMore = true;
         int nextPage = currentPage + 1;
 
-        Log.d("SearchActivity", "加载更多: 第" + nextPage + "页");
+        Log.d("SearchActivity", "loading more: page " + nextPage + ".");
 
-        // 显示加载提示
-        Toast.makeText(this, "加载第" + nextPage + "页...", Toast.LENGTH_SHORT).show();
+        // show loading hint
+        Toast.makeText(this, "loading page" + nextPage + "...", Toast.LENGTH_SHORT).show();
 
         performSearch(currentQuery, nextPage, true);
     }
 
     private void refreshSearchResults() {
         if (currentQuery != null) {
-            // 刷新时回到第1页
+            // refresh back to page 1
             performSearch(currentQuery, 1, false);
         }
         RefreshUtils.stopRefresh(swipeRefresh);

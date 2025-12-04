@@ -12,7 +12,7 @@
         android:id="@+id/tv_search_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="搜索结果"
+        android:text="Search results"
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -25,7 +25,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- RecyclerView 双列视频列表 - 直接跟在轮播图下面 -->
+        <!-- RecyclerView two-column video list - directly below the carousel -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_video_list"
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_weight="1" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <!-- 底部导航 -->
+    <!-- Bottom navigation -->
     <include layout="@layout/bottombar" />
 
 </LinearLayout>
