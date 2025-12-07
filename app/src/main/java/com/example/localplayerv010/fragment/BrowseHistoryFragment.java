@@ -281,22 +281,48 @@ public class BrowseHistoryFragment extends Fragment {
     }
 
     private void clearHistory() {
+        // 先检查 Fragment 是否还 attached
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+
         if (!UserPrefs.isLoggedIn(requireContext())) {
-            Toast.makeText(getContext(), "please login first", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "please login first", Toast.LENGTH_SHORT).show();
+                });
+            }
             return;
         }
 
         historyService.clearHistory(new BrowseHistoryService.ClearCallback() {
             @Override
             public void onSuccess(int deletedCount) {
-                Toast.makeText(getContext(), "cleared " + deletedCount + " records", Toast.LENGTH_SHORT).show();
-                // Reload after clearing
-                loadHistoryAndStats();
+                // Ensure UI operations are performed on the main thread
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        // Double-check that the Fragment is attached.
+                        if (!isAdded() || getContext() == null) {
+                            return;
+                        }
+                        Toast.makeText(getContext(), "cleared " + deletedCount + " records", Toast.LENGTH_SHORT).show();
+                        // Reload data
+                        loadHistoryAndStats();
+                    });
+                }
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Toast.makeText(getContext(), "failed to clean: " + errorMessage, Toast.LENGTH_SHORT).show();
+                // Critical fix: Displaying a Toast in the main thread
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (!isAdded() || getContext() == null) {
+                            return;
+                        }
+                        Toast.makeText(getContext(), "clearing session failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }

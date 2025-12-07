@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
     private TextView createCategoryView(String categoryName, int position, int itemWidth) {
         TextView textView = new TextView(getContext());
 
-        // 应用样式
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             textView.setTextAppearance(R.style.CategoryTabStyle);
         } else {

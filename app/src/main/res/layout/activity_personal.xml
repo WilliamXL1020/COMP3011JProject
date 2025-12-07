@@ -59,7 +59,7 @@
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户名"
+                    android:text="Username"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
@@ -119,7 +119,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关注"
+                        android:text="attention"
                         android:textSize="12sp"
                         android:textColor="#666666" />
 
@@ -239,7 +239,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="我的作品"
+                        android:text="my work"
                         android:textSize="16sp" />
 
                     <TextView

@@ -18,7 +18,7 @@ public class MockVideoService {
         String[] categories = {"gaming", "music", "lifestyle", "education", "technology", "movie", "funny"};
         String[] uploaders = {"John", "Tech expert", "Lifestyle blogger", "gaming expert", "Music lovers"};
 
-        // 创建40个模拟视频
+
         for (int i = 1; i <= 40; i++) {
             VideoItem video = new VideoItem();
             video.setVideoId("video_" + i);

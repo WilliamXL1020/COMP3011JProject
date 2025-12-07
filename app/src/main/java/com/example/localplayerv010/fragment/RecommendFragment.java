@@ -176,18 +176,18 @@ public class RecommendFragment extends Fragment {
 
     private List<VideoItem> processVideoData(List<VideoItem> allVideos) {
         List<VideoItem> result = new ArrayList<>();
-        Log.d("VideoProcess", "原始数据: " + allVideos.size() + "个视频");
+        Log.d("VideoProcess", "Raw data: " + allVideos.size() + "videos");
 
-        // 1. 随机打乱
+
         Collections.shuffle(allVideos);
 
-        // 2. 限制数量（比如20个）
+
         int maxCount = Math.min(allVideos.size(), 10);
         for (int i = 0; i < maxCount; i++) {
             result.add(allVideos.get(i));
         }
 
-        Log.d("VideoProcess", "最终返回: " + result.size() + "个视频");
+        Log.d("VideoProcess", "finally returned: " + result.size() + "videos");
         return result;
     }
 
@@ -206,7 +206,7 @@ public class RecommendFragment extends Fragment {
             bannerPager.setAdapter(adapter);
 
         } catch (Exception e) {
-            Log.e("BannerDebug", "banner错误: " + e.getMessage());
+            Log.e("BannerDebug", "banner error: " + e.getMessage());
         }
 
         bannerPager.setOffscreenPageLimit(5);
@@ -215,19 +215,19 @@ public class RecommendFragment extends Fragment {
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager2.SCROLL_STATE_DRAGGING:
-                        // 用户开始拖动，停止自动轮播
+                        // When the user starts dragging, the automatic carousel stops.
                         isUserTouching = true;
                         stopAutoScroll();
                         break;
                     case ViewPager2.SCROLL_STATE_IDLE:
-                        // 滚动停止，如果是用户操作结束就重新开始自动轮播
+                        // Scrolling stops; if the user finishes interacting with the system, automatic carousel playback resumes
                         if (isUserTouching) {
                             isUserTouching = false;
                             startAutoScroll();
                         }
                         break;
                     case ViewPager2.SCROLL_STATE_SETTLING:
-                        // 自动滚动中，不做处理
+                        // No action is taken while the page is scrolling automatically
                         break;
                 }
             }
@@ -272,7 +272,7 @@ public class RecommendFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // 页面显示时开始轮播
+        // Start carousel when the page is displayed
         if (!isUserTouching) {
             startAutoScroll();
         }
@@ -281,14 +281,14 @@ public class RecommendFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        // 页面隐藏时停止轮播，节省资源
+        // Stop the carousel when the page is hidden to save resources
         stopAutoScroll();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // 清理资源
+        // Clean up resources
         stopAutoScroll();
         if (autoScrollHandler != null) {
             autoScrollHandler.removeCallbacksAndMessages(null);

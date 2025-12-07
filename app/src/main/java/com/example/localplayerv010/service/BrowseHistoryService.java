@@ -32,6 +32,7 @@ public class BrowseHistoryService {
         executor.execute(() -> {
             try {
                 int userId = UserPrefs.getCurrentUserId(context);
+
                 if (userId == -1) {
                     Log.d("BrowseHistory", "The user is not logged in; browsing history will be skipped.");
                     return;
@@ -53,7 +54,9 @@ public class BrowseHistoryService {
                             userId,
                             video.getVideoId(),
                             video.getTitle(),
+
                             video.getCategory()
+
                     );
                     history.setLastPosition(video.getLastPlayPosition());
 
@@ -69,6 +72,8 @@ public class BrowseHistoryService {
             }
         });
     }
+
+
 
     // 获取用户浏览记录
     public void getBrowseHistory(HistoryCallback callback) {
