@@ -77,6 +77,11 @@ public class BrowseHistoryFragment extends Fragment {
                 playVideoFromHistory(history, history.getLastPosition());
             });
 
+            adapter.setOnDeleteClickListener((position, history) -> {
+                Log.d(TAG, "Delete video record: " + history.getVideoTitle());
+                deleteHistoryRecord(history, position);
+            });
+
             recyclerView.setAdapter(adapter);
             Log.d(TAG, "RecyclerView setup complete.");
         }
@@ -321,6 +326,109 @@ public class BrowseHistoryFragment extends Fragment {
                             return;
                         }
                         Toast.makeText(getContext(), "clearing session failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+        });
+    }
+
+
+    private void deleteHistoryRecord(BrowseHistory history, int position) {
+
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+
+        if (!UserPrefs.isLoggedIn(requireContext())) {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Please login first", Toast.LENGTH_SHORT).show();
+                });
+            }
+            return;
+        }
+
+
+        new android.app.AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete \"" + history.getVideoTitle() + "\" viewing record?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    performDeleteHistory(history, position);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+
+    private void performDeleteHistory(BrowseHistory history, int position) {
+
+        if (!isAdded() || getContext() == null) {
+            Log.w(TAG, "Fragment is not attached, cannot perform delete");
+            return;
+        }
+
+        Log.d(TAG, "Start deleting history record, ID: " + history.getId() + ", Position: " + position + ", Video: " + history.getVideoTitle());
+
+
+        historyService.deleteHistory((int)history.getId(), new BrowseHistoryService.DeleteCallback() {
+            @Override
+            public void onSuccess(int deletedCount) {
+                Log.d(TAG, "Delete callback received success, deleted count: " + deletedCount);
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+
+                        if (!isAdded() || getContext() == null) {
+                            Log.w(TAG, "Fragment is detached, skip UI update");
+                            return;
+                        }
+
+                        if (deletedCount > 0) {
+
+                            Toast.makeText(getContext(), "Successfully deleted", Toast.LENGTH_SHORT).show();
+
+
+                            if (adapter != null) {
+                                adapter.removeItem(position);
+                            }
+
+
+                            loadHistoryAndStats();
+
+                            Log.d(TAG, "Delete completed, current list items: " + (adapter != null ? adapter.getItemCount() : 0));
+
+                        } else {
+                            Toast.makeText(getContext(), "Record does not exist or has been deleted", Toast.LENGTH_SHORT).show();
+
+                            loadHistoryAndStats();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Delete failed: " + errorMessage);
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (!isAdded() || getContext() == null) return;
+
+
+
+                        String userMessage;
+                        if  (errorMessage.contains("not logged in")) {
+                            userMessage = "Please login first";
+                        } else if (errorMessage.contains("no permission")) {
+                            userMessage = "No permission to delete this record";
+                        } else {
+                            userMessage = "Delete failed: " + errorMessage;
+                        }
+
+                        Toast.makeText(getContext(), userMessage, Toast.LENGTH_SHORT).show();
+
+
+                        loadHistoryAndStats();
                     });
                 }
             }

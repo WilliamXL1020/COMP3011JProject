@@ -129,6 +129,36 @@ public class BrowseHistoryService {
         });
     }
 
+    public void deleteHistory(int historyId, DeleteCallback callback) {
+        executor.execute(() -> {
+            try {
+                int userId = UserPrefs.getCurrentUserId(context);
+                if (userId == -1) {
+                    callback.onFailure("user not logged in");
+                    return;
+                }
+
+
+                int deletedCount = historyDao.deleteHistory(historyId);
+
+                if (deletedCount > 0) {
+                    Log.d("BrowseHistory", "successfully deleted history, ID: " + historyId);
+                    callback.onSuccess(deletedCount);
+                } else {
+                    callback.onFailure("record not exist or lack permission");
+                }
+            } catch (Exception e) {
+                Log.e("BrowseHistory", "failed to delete brose history: " + e.getMessage());
+                callback.onFailure("failed to delete: " + e.getMessage());
+            }
+        });
+    }
+
+    public interface DeleteCallback {
+        void onSuccess(int deletedCount);
+        void onFailure(String errorMessage);
+    }
+
     public interface HistoryCallback {
         void onSuccess(List<BrowseHistory> history);
         void onFailure(String errorMessage);

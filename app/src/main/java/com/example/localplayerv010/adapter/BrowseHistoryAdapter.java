@@ -20,6 +20,7 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
     private List<BrowseHistory> historyList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private OnContinueWatchClickListener onContinueWatchClickListener;
+    private OnDeleteClickListener onDeleteClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(int position, BrowseHistory history);
@@ -27,6 +28,10 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
 
     public interface OnContinueWatchClickListener {
         void onContinueWatchClick(int position, BrowseHistory history);
+    }
+
+    public interface OnDeleteClickListener {
+        void onDeleteClick(int position, BrowseHistory history);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -37,9 +42,21 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
         this.onContinueWatchClickListener = listener;
     }
 
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        this.onDeleteClickListener = listener;
+    }
+
     public void setHistoryList(List<BrowseHistory> historyList) {
         this.historyList = historyList;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        if (position >= 0 && position < historyList.size()) {
+            historyList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, historyList.size() - position);
+        }
     }
 
     @NonNull
@@ -82,7 +99,9 @@ public class BrowseHistoryAdapter extends RecyclerView.Adapter<BrowseHistoryAdap
 
         // Delete button (not yet implemented)
         holder.btnDelete.setOnClickListener(v -> {
-            // Deletion function to be implemented
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(position, history);
+            }
         });
     }
 
