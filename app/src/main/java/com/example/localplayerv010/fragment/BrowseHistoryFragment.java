@@ -224,6 +224,15 @@ public class BrowseHistoryFragment extends Fragment {
         }
 
         if (foundVideo != null) {
+            // 检查 Mock 视频的分类是否正确
+            if (foundVideo.getCategory() == null || foundVideo.getCategory().equals("selected")) {
+                // 如果 Mock 视频的分类也是 "selected"，需要修复
+                String fixedCategory = determineCategoryFromTitle(foundVideo.getTitle());
+                foundVideo.setCategory(fixedCategory);
+                Log.d(TAG, "Fixed mock video category for '" + foundVideo.getTitle() +
+                        "': from '" + foundVideo.getCategory() + "' to '" + fixedCategory + "'");
+            }
+
             foundVideo.setLastPlayPosition(startPosition);
             navigateToPlayer(foundVideo);
         } else {
@@ -236,7 +245,14 @@ public class BrowseHistoryFragment extends Fragment {
         VideoItem video = new VideoItem();
         video.setVideoId(history.getVideoId());
         video.setTitle(history.getVideoTitle());
-        video.setCategory(history.getCategory());
+        String category = history.getCategory();
+        if (category == null || category.isEmpty() || category.equals("selected")) {
+
+            category = determineCategoryFromTitle(history.getVideoTitle());
+            Log.d(TAG, "Fixed category for '" + history.getVideoTitle() +
+                    "': from '" + history.getCategory() + "' to '" + category + "'");
+        }
+        video.setCategory(category);
         video.setDescription("Videos from browsing history");
         video.setLastPlayPosition(startPosition);
 
@@ -244,6 +260,59 @@ public class BrowseHistoryFragment extends Fragment {
         video.setVideoPath("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4");
 
         navigateToPlayer(video);
+    }
+
+    private String determineCategoryFromTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return "unknown";
+        }
+
+        title = title.toLowerCase();
+
+        if (title.contains("game") || title.contains("gaming") ||
+                title.contains("play") || title.contains("player")) {
+            return "gaming";
+        }
+        if (title.contains("music") || title.contains("song") ||
+                title.contains("album") || title.contains("concert")) {
+            return "music";
+        }
+        if (title.contains("life") || title.contains("lifestyle") ||
+                title.contains("style") || title.contains("daily")) {
+            return "lifestyle";
+        }
+        if (title.contains("education") || title.contains("learn") ||
+                title.contains("study") || title.contains("course")) {
+            return "education";
+        }
+        if (title.contains("tech") || title.contains("technology") ||
+                title.contains("computer") || title.contains("digital")) {
+            return "technology";
+        }
+        if (title.contains("movie") || title.contains("film") ||
+                title.contains("cinema") || title.contains("show")) {
+            return "movie";
+        }
+        if (title.contains("funny") || title.contains("comedy") ||
+                title.contains("humor") || title.contains("joke")) {
+            return "funny";
+        }
+
+        if (title.contains("amazing video")) {
+
+            try {
+                String numberStr = title.replaceAll("[^0-9]", "");
+                if (!numberStr.isEmpty()) {
+                    int num = Integer.parseInt(numberStr);
+                    String[] categories = {"gaming", "music", "lifestyle", "education", "technology", "movie", "funny"};
+                    return categories[num % categories.length];
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "Cannot parse number from title: " + title);
+            }
+        }
+
+        return "entertainment";
     }
 
     private void navigateToPlayer(VideoItem video) {

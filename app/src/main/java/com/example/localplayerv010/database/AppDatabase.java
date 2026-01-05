@@ -100,10 +100,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
                 db.close();
             } else {
-                Log.d("Fix", "数据库文件不存在，将创建新数据库");
+                Log.d("Fix", "database not exist");
             }
         } catch (Exception e) {
-            Log.e("Fix", "修复失败: " + e.getMessage());
+            Log.e("Fix", "failed to repair: " + e.getMessage());
         }
     }
 

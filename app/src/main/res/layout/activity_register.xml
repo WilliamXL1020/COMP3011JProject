@@ -6,7 +6,7 @@
     android:background="@color/background">
 
     <!-- Top toolbar - Keeps it consistent with the homepage -->
-    <include layout="@layout/toolbar" />
+    <!--<include layout="@layout/toolbar" />-->
 
     <!-- Registration content area -->
     <ScrollView
@@ -210,6 +210,6 @@
     </ScrollView>
 
     <!-- Bottom navigation bar - consistent with the homepage -->
-    <include layout="@layout/bottombar" />
+    <!--<include layout="@layout/bottombar" />-->
 
 </LinearLayout>

@@ -38,6 +38,10 @@ public class BrowseHistoryService {
                     return;
                 }
 
+                Log.d("BrowseHistory", "Recording video: " + video.getTitle());
+                Log.d("BrowseHistory", "Video category: " + video.getCategory());
+                Log.d("BrowseHistory", "Video ID: " + video.getVideoId());
+
                // Check if the video already exists.
                 BrowseHistory existingHistory = historyDao.getHistoryByVideo(userId, video.getVideoId());
 
@@ -54,7 +58,6 @@ public class BrowseHistoryService {
                             userId,
                             video.getVideoId(),
                             video.getTitle(),
-
                             video.getCategory()
 
                     );

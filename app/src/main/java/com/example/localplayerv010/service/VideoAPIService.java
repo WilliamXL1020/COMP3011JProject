@@ -3,6 +3,7 @@ package com.example.localplayerv010.service;
 import android.util.Log;
 
 import com.example.localplayerv010.model.PexelsVideo;
+import com.example.localplayerv010.model.VideoFile;
 import com.example.localplayerv010.model.VideoItem;
 import com.example.localplayerv010.model.VideoListResponse;
 import com.example.localplayerv010.network.RetrofitClient;
@@ -78,6 +79,43 @@ public class VideoAPIService {
             public void onResponse(Call<VideoListResponse> call, Response<VideoListResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     List<PexelsVideo>pexelsVideos = response.body().getVideos();
+
+                    Log.d("API_DEBUG", "✅ API Response Successful for: \"" + query + "\"");
+                    Log.d("API_DEBUG", "📊 Total videos returned: " + pexelsVideos.size());
+
+                    if (!pexelsVideos.isEmpty()) {
+                        PexelsVideo firstVideo = pexelsVideos.get(0);
+                        Log.d("API_DEBUG", "📹 First video details:");
+                        Log.d("API_DEBUG", "   ID: " + firstVideo.getId());
+                        Log.d("API_DEBUG", "   Duration: " + firstVideo.getDuration() + "s");
+                        Log.d("API_DEBUG", "   Image URL: " + firstVideo.getImage());
+
+                        if (firstVideo.getUser() != null) {
+                            Log.d("API_DEBUG", "   User: " + firstVideo.getUser().getName());
+                        }
+
+                        if (firstVideo.getTags() != null) {
+                            Log.d("API_DEBUG", "   Tags: " + firstVideo.getTags());
+                        }
+
+                        // 查看视频文件信息
+                        if (firstVideo.getVideo_files() != null) {
+                            Log.d("API_DEBUG", "   Video files: " + firstVideo.getVideo_files().size());
+                            for (int i = 0; i < Math.min(3, firstVideo.getVideo_files().size()); i++) {
+                                VideoFile file = firstVideo.getVideo_files().get(i);
+                                Log.d("API_DEBUG", "     File " + i + ": " +
+                                        file.getQuality() + " - " + file.getFileType());
+                            }
+                        }
+                    }
+
+                    Log.d("API_DEBUG", "🏷️ All video tags in this search:");
+                    for (PexelsVideo video : pexelsVideos) {
+                        if (video.getTags() != null && !video.getTags().isEmpty()) {
+                            Log.d("API_DEBUG", "   Video " + video.getId() + ": " + video.getTags());
+                        }
+                    }
+
                     List<VideoItem>videoItems = VideoConverter.fromPexelsVideos(pexelsVideos);
                     callback.onSuccess(videoItems);
 

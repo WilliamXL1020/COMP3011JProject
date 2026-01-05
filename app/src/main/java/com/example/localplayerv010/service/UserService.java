@@ -62,7 +62,7 @@ public class UserService {
 
                 User user = userDao.login(usernameOrEmail, password);
                 if (user != null) {
-                    // 更新登录时间
+                    // update login time
                     userDao.updateLoginTime(user.getId(), System.currentTimeMillis());
                     Log.d("UserService", "✅ Login successful, User ID: " + user.getId());
 

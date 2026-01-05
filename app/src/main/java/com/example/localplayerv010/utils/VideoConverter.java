@@ -10,7 +10,10 @@ import com.example.localplayerv010.model.VideoFile;
 import com.example.localplayerv010.model.VideoItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VideoConverter {
 
@@ -63,10 +66,23 @@ public class VideoConverter {
         // Set default business data (because the Pexels API does not provide this)
         videoItem.setPlayCount(1000 + (int)(Math.random() * 1000)); // Random play count
         videoItem.setLikeCount(50 + (int)(Math.random() * 100));   // Random number of likes
-        videoItem.setCategory("selected"); // Default Category
+
+        String category = determineCategoryFromPexelsData(pexelsVideo);
+        videoItem.setCategory(category);
+
+        //videoItem.setCategory("selected");
         videoItem.setFileSize(10485760L); // Default file size 10MB
 
         return videoItem;
+    }
+
+    private static String determineCategoryFromPexelsData(PexelsVideo pexelsVideo) {
+        if (pexelsVideo == null) {
+            return "selected";
+        } else {
+            // 使用新的智能分类工具
+            return CategoryUtils.determineCategoryFromPexelsData(pexelsVideo);
+        }
     }
 
     public static List<VideoItem> fromPexelsVideos(List<PexelsVideo> pexelsVideos) {
